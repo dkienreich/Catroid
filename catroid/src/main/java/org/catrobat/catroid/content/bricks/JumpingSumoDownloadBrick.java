@@ -20,7 +20,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.catrobat.catroid.content.bricks;
+
 
 import android.view.View;
 
@@ -31,18 +33,17 @@ import org.catrobat.catroid.content.Sprite;
 
 import java.util.List;
 
-public class JumpingSumoTurnBrick extends JumpingSumoBasicBrick {
+public class JumpingSumoDownloadBrick extends JumpingSumoBasicBrick {
 	private static final long serialVersionUID = 1L;
-	private long WAIT_TIME;
 
 	@Override
 	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createJumpingSumoTurnAction(WAIT_TIME));
+		sequence.addAction(sprite.getActionFactory().createJumpingSumoDownloadAction());
 		return null;
 	}
 
 	@Override
 	protected String getBrickLabel(View view) {
-		return view.getResources().getString(R.string.brick_jumping_sumo_turn);
+		return view.getResources().getString(R.string.brick_jumping_sumo_download);
 	}
 }

@@ -30,59 +30,26 @@
               android:orientation="horizontal" >
 
     <CheckBox
-        android:id="@+id/brick_jumping_sumo_sound_checkbox"
+        android:id="@+id/brick_jumping_sumo_nosound_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:visibility="gone" />
 
     <org.catrobat.catroid.ui.BrickLayout
-        android:id="@+id/brick_jumping_sumo_sound_layout"
-        style="@style/BrickContainer.Sound.Big"
+        android:id="@+id/brick_jumping_sumo_nosound_layout"
+        style="@style/BrickContainer.Sound.Medium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
         android:orientation="horizontal"
         app:horizontalSpacing="@dimen/brick_flow_layout_horizontal_spacing"
         app:verticalSpacing="@dimen/brick_flow_layout_vertical_spacing" >
 
         <TextView
-            android:id="@+id/brick_jumping_sumo_sound_label"
+            android:id="@+id/ValueTextView"
             style="@style/BrickText.SingleLine"
-            android:text="@string/default_jumping_sumo_project_sprites_sound" >
-        </TextView >
+            android:text="" >
+        </TextView>
+    </org.catrobat.catroid.ui.BrickLayout>
 
-        <Spinner
-            android:id="@+id/brick_jumping_sumo_sound_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:focusable="false" >
-        </Spinner >
-
-        <TextView
-            android:id="@+id/brick_jumping_sumo_sound_volume"
-            style="@style/BrickText.SingleLine"
-            android:text="@string/jumping_sumo_volume" >
-        </TextView >
-
-        <TextView
-            android:id="@+id/brick_jumping_sumo_sound_text_view"
-            style="@style/BrickText.SingleLine" >
-        </TextView >
-
-        <TextView
-            android:id="@+id/brick_jumping_sumo_sound_edit_text"
-            style="@style/BrickEditText"
-            app:layout_inputType="number"
-            app:layout_textField="true"
-            android:clickable="false" >
-        </TextView >
-
-        <TextView
-            android:id="@+id/brick_jumping_sumo_sound_percent"
-            style="@style/BrickText"
-            android:text="@string/percent_symbol" >
-        </TextView >
-    </org.catrobat.catroid.ui.BrickLayout >
 </LinearLayout>

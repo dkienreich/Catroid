@@ -51,6 +51,12 @@
             android:text="@string/brick_jumping_sumo_rotate" />
 
         <TextView
+            android:id="@+id/brick_jumping_sumo_change_variable_edit_text"
+            style="@style/BrickEditText"
+            app:layout_inputType="number"
+            app:layout_textField="true" />
+
+        <TextView
             android:id="@+id/brick_jumping_sumo_rotate_value"
             style="@style/BrickText.SingleLine" />
 
@@ -58,14 +64,8 @@
             android:id="@+id/brick_jumping_sumo_rotate_text"
             style="@style/BrickText.SingleLine"
             android:text="@string/brick_jumping_sumo_rotate_text"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/brick_change_variable_edit_text"
-            style="@style/BrickEditText"
-            app:layout_inputType="number"
-            app:layout_textField="true" />
     </org.catrobat.catroid.ui.BrickLayout >
 
 </LinearLayout>

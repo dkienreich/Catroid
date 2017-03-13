@@ -23,11 +23,11 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_vertical"
-    android:orientation="horizontal" >
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_vertical"
+              android:orientation="horizontal" >
 
     <CheckBox
         android:id="@+id/brick_jumping_sumo_move_checkbox"
@@ -56,34 +56,25 @@
             app:layout_textField="true" />
 
         <TextView
-            android:id="@+id/brick_jumping_sumo_move_prototype_text_view_second"
-            style="@style/BrickText.SingleLine" />
-
-
-        <TextView
             android:id="@+id/brick_jumping_sumo_move_text_view_second"
             style="@style/BrickText.SingleLine"
             app:layout_newLine="true" />
-        
+
         <TextView
             android:id="@+id/brick_jumping_sumo_move_text_view_power"
             style="@style/BrickText.SingleLine"
             android:text="@string/brick_drone_with" />
 
         <TextView
-            android:id="@+id/brick_jumping_sumo_move_prototype_text_view_power"
-            style="@style/BrickText.SingleLine" />
-
-        <TextView
             android:id="@+id/brick_jumping_sumo_move_edit_text_power"
             style="@style/BrickEditText"
             app:layout_inputType="number"
             app:layout_textField="true" />
-        
+
         <TextView
             android:id="@+id/brick_jumping_sumo_set_power_to_percent"
             style="@style/BrickText.SingleLine"
-            android:text="@string/brick_drone_percent_power" />
+            android:text="@string/brick_jumping_sumo_percent_power" />
     </org.catrobat.catroid.ui.BrickLayout>
 
 </LinearLayout>

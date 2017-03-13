@@ -20,29 +20,39 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.catrobat.catroid.content.bricks;
 
-import android.view.View;
+package org.catrobat.catroid.content.actions;
 
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
-import org.catrobat.catroid.R;
-import org.catrobat.catroid.content.Sprite;
+import android.util.Log;
 
-import java.util.List;
+import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
+import com.parrot.arsdk.arcontroller.ARDeviceController;
 
-public class JumpingSumoTurnBrick extends JumpingSumoBasicBrick {
-	private static final long serialVersionUID = 1L;
-	private long WAIT_TIME;
+import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoDeviceController;
+import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoSDCardModule;
+
+public class JumpingSumoDownloadAction extends TemporalAction {
+
+	private ARDeviceController deviceController;
+	private JumpingSumoDeviceController controller;
+	private JumpingSumoSDCardModule mSDCardModule;
+	private static final String TAG = JumpingSumoDownloadAction.class.getSimpleName();
 
 	@Override
-	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createJumpingSumoTurnAction(WAIT_TIME));
-		return null;
+	protected void begin() {
+		super.begin();
+		controller = JumpingSumoDeviceController.getInstance();
+		deviceController = controller.getDeviceController();
+
+			Log.d(TAG, "download picture");
+			mSDCardModule.getallFlightMedias();
+			Log.d(TAG, "download finished");
+
 	}
 
 	@Override
-	protected String getBrickLabel(View view) {
-		return view.getResources().getString(R.string.brick_jumping_sumo_turn);
+	protected void update(float percent) {
+		//Nothing to do
 	}
 }

@@ -98,7 +98,6 @@ public abstract class JumpingSumoMoveBrick extends FormulaBrick {
 			}
 		});
 
-		TextView textTime = (TextView) view.findViewById(R.id.brick_jumping_sumo_move_prototype_text_view_second);
 		TextView editTime = (TextView) view.findViewById(R.id.brick_jumping_sumo_move_edit_text_second);
 		getFormulaWithBrickField(BrickField.JUMPING_SUMO_TIME_TO_DRIVE_IN_SECONDS)
 				.setTextFieldId(R.id.brick_jumping_sumo_move_edit_text_second);
@@ -124,17 +123,16 @@ public abstract class JumpingSumoMoveBrick extends FormulaBrick {
 		TextView label = (TextView) view.findViewById(R.id.brick_jumping_sumo_move_label);
 		label.setText(getBrickLabel(view));
 
-		textTime.setVisibility(View.GONE);
 		editTime.setVisibility(View.VISIBLE);
 		editTime.setOnClickListener(this);
 
-		TextView textPower = (TextView) view.findViewById(R.id.brick_jumping_sumo_move_prototype_text_view_power);
 		TextView editPower = (TextView) view.findViewById(R.id.brick_jumping_sumo_move_edit_text_power);
 		getFormulaWithBrickField(BrickField.JUMPING_SUMO_SPEED)
 				.setTextFieldId(R.id.brick_jumping_sumo_move_edit_text_power);
 		getFormulaWithBrickField(BrickField.JUMPING_SUMO_SPEED).refreshTextField(view);
+		TextView textPower = (TextView) view.findViewById(R.id.brick_jumping_sumo_move_text_view_power);
 
-		textPower.setVisibility(View.GONE);
+		textPower.setVisibility(View.VISIBLE);
 		editPower.setVisibility(View.VISIBLE);
 		editPower.setOnClickListener(this);
 
@@ -146,10 +144,10 @@ public abstract class JumpingSumoMoveBrick extends FormulaBrick {
 		prototypeView = View.inflate(context, R.layout.brick_jumping_sumo_move, null);
 		TextView label = (TextView) prototypeView.findViewById(R.id.brick_jumping_sumo_move_label);
 		label.setText(getBrickLabel(prototypeView));
-		TextView textTime = (TextView) prototypeView.findViewById(R.id.brick_jumping_sumo_move_prototype_text_view_second);
+		TextView textTime = (TextView) prototypeView.findViewById(R.id.brick_jumping_sumo_move_edit_text_second);
 
 		TextView times = (TextView) prototypeView.findViewById(R.id.brick_jumping_sumo_move_text_view_second);
-		TextView textPower = (TextView) prototypeView.findViewById(R.id.brick_jumping_sumo_move_prototype_text_view_power);
+		TextView textPower = (TextView) prototypeView.findViewById(R.id.brick_jumping_sumo_move_edit_text_power);
 		textTime.setText(String.valueOf(BrickValues.JUMPING_SUMO_MOVE_BRICK_DEFAULT_TIME_MILLISECONDS / 1000));
 
 		textPower.setText(String.valueOf(BrickValues.JUMPING_SUMO_MOVE_BRICK_DEFAULT_MOVE_POWER_PERCENT));

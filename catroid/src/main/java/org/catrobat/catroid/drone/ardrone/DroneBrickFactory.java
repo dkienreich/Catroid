@@ -65,8 +65,8 @@ public final class DroneBrickFactory {
 			case DRONE_TAKE_OFF_LAND_BRICK:
 				return new DroneTakeOffLandBrick();
 
-			case DRONE_FLIP_BRICK:
-				return new DroneFlipBrick();
+			/*case DRONE_FLIP_BRICK:
+				return new DroneFlipBrick();*/
 
 			case DRONE_PLAY_LED_ANIMATION_BRICK:
 				return new DronePlayLedAnimationBrick();

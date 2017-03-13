@@ -39,8 +39,17 @@ public class JumpingSumoAnimationAction extends TemporalAction {
 
 	private JumpingSumoAnimationsBrick.Animation animationEnum;
 	private Sprite sprite;
+	private long duration;
 
 	private static final String TAG = JumpingSumoAnimationAction.class.getSimpleName();
+
+	public void setAnimationEnum(JumpingSumoAnimationsBrick.Animation animationEnum) {
+		this.animationEnum = animationEnum;
+	}
+
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
 
 	@Override
 	protected void begin() {
@@ -61,30 +70,39 @@ public class JumpingSumoAnimationAction extends TemporalAction {
 			switch (animationEnum) {
 				case SPIN:
 					deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SPIN);
+					duration = 2500;
 					break;
 				case TAB:
 					deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_TAP);
+					duration = 600;
 					break;
 				case SLOWSHAKE:
 					deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SLOWSHAKE);
+					duration = 2000;
 					break;
 				case METRONOME:
 					deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_METRONOME);
+					duration = 4000;
 					break;
 				case ONDULATION:
 					deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ONDULATION);
+					duration = 1400;
 					break;
 				case SPINJUMP:
 					deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SPINJUMP);
+					duration = 5000; // wert vlt falsch
 					break;
 				case SPINTOPOSTURE:
 					deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SPINTOPOSTURE);
+					duration = 5000; //wert vlt falsch
 					break;
 				case SPIRAL:
 					deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SPIRAL);
+					duration = 8150;
 					break;
 				case SLALOM:
 					deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_SLALOM);
+					duration = 1400;
 					break;
 				case STOP:
 					deviceController.getFeatureJumpingSumo().sendAnimationsSimpleAnimation(ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_ENUM.ARCOMMANDS_JUMPINGSUMO_ANIMATIONS_SIMPLEANIMATION_ID_STOP);
@@ -95,11 +113,7 @@ public class JumpingSumoAnimationAction extends TemporalAction {
 		}
 	}
 
-	public void setAnimationEnum(JumpingSumoAnimationsBrick.Animation animationEnum) {
-		this.animationEnum = animationEnum;
-	}
-
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public void setDelay(long delay) {
+		this.duration = delay;
 	}
 }

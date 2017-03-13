@@ -46,6 +46,7 @@ public class JumpingSumoAnimationsBrick extends BrickBaseType {
 	private transient AdapterView<?> adapterView;
 	private String animation;
 	private transient Animation animationenum;
+	private long WAIT_TIME;
 
 	public enum Animation {
 		SPIN, TAB, SLOWSHAKE, METRONOME, ONDULATION, SPINJUMP, SPINTOPOSTURE, SPIRAL, SLALOM, STOP
@@ -141,30 +142,30 @@ public class JumpingSumoAnimationsBrick extends BrickBaseType {
 
 		return view;
 	}
-/*
-	@Override
-	public View getViewWithAlpha(int alphaValue) {
+	/*
+		@Override
+		public View getViewWithAlpha(int alphaValue) {
 
-		if (view != null) {
-			View layout = view.findViewById(R.id.brick_jumping_sumo_animation_layout);
-			Drawable background = layout.getBackground();
-			background.setAlpha(alphaValue);
+			if (view != null) {
+				View layout = view.findViewById(R.id.brick_jumping_sumo_animation_layout);
+				Drawable background = layout.getBackground();
+				background.setAlpha(alphaValue);
 
-			TextView textJumpingSumoActionLabel = (TextView) view.findViewById(R.id.brick_jumping_sumo_animation_text_view);
+				TextView textJumpingSumoActionLabel = (TextView) view.findViewById(R.id.brick_jumping_sumo_animation_text_view);
 
-			textJumpingSumoActionLabel.setTextColor(textJumpingSumoActionLabel.getTextColors().withAlpha(alphaValue));
+				textJumpingSumoActionLabel.setTextColor(textJumpingSumoActionLabel.getTextColors().withAlpha(alphaValue));
 
-			Spinner animationSpinner = (Spinner) view.findViewById(R.id.brick_jumping_sumo_animation_spinner);
-			animationSpinner.getBackground().setAlpha(alphaValue);
+				Spinner animationSpinner = (Spinner) view.findViewById(R.id.brick_jumping_sumo_animation_spinner);
+				animationSpinner.getBackground().setAlpha(alphaValue);
 
-			this.alphaValue = alphaValue;
+				this.alphaValue = alphaValue;
+			}
+			return view;
 		}
-		return view;
-	}
-*/
+	*/
 	@Override
 	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createJumpingSumoAnimationAction(sprite, animationenum));
+		sequence.addAction(sprite.getActionFactory().createJumpingSumoAnimationAction(sprite, animationenum, WAIT_TIME));
 		return null;
 	}
 }

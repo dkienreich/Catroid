@@ -37,6 +37,7 @@ public class JumpingSumoRotateRightAction extends TemporalAction {
 	private Sprite sprite;
 	private Formula degree;
 	private float newDegree;
+	private long duration = 2000;
 
 	protected static final float JUMPING_SUMO_ROTATE_ZERO = 0.0f;
 
@@ -50,6 +51,10 @@ public class JumpingSumoRotateRightAction extends TemporalAction {
 
 	public void setDegree(Formula degree) {
 		this.degree = degree;
+	}
+
+	public void setDelay(long delay) {
+		this.duration = delay;
 	}
 
 	@Override

@@ -71,7 +71,7 @@ public abstract class JumpingSumoRotateBrick extends FormulaBrick {
 		prototypeView = View.inflate(context, R.layout.brick_jumping_sumo_rotate, null);
 		TextView label = (TextView) prototypeView.findViewById(R.id.brick_jumping_sumo_rotate_label);
 		label.setText(getBrickLabel(prototypeView));
-		TextView textDegree = (TextView) prototypeView.findViewById(R.id.brick_jumping_sumo_rotate_value);
+		TextView textDegree = (TextView) prototypeView.findViewById(R.id.brick_jumping_sumo_change_variable_edit_text);
 		textDegree.setText(String.valueOf(BrickValues.JUMPING_SUMO_ROTATE_DEFAULT_DEGREE));
 		return prototypeView;
 	}
@@ -82,7 +82,7 @@ public abstract class JumpingSumoRotateBrick extends FormulaBrick {
 			return;
 		}
 		switch (view.getId()) {
-			case R.id.brick_jumping_sumo_rotate_value:
+			case R.id.brick_jumping_sumo_change_variable_edit_text:
 				FormulaEditorFragment.showFragment(view, this, BrickField.JUMPING_SUMO_ROTATE);
 				break;
 

@@ -22,7 +22,11 @@
  */
 package org.catrobat.catroid.content.bricks;
 
+import android.content.Context;
 import android.view.View;
+import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
@@ -33,6 +37,46 @@ import java.util.List;
 
 public class JumpingSumoNoSoundBrick extends JumpingSumoBasicBrick {
 	private static final long serialVersionUID = 1L;
+
+	@Override
+	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+		if (animationState) {
+			return view;
+		}
+		if (view == null) {
+			alphaValue = 255;
+		}
+		view = View.inflate(context, R.layout.brick_jumping_sumo_nosound, null);
+
+		setCheckboxView(R.id.brick_jumping_sumo_nosound_checkbox);
+		final Brick brickInstance = this;
+		checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				adapter.handleCheck(brickInstance, isChecked);
+			}
+		});
+
+		TextView label = (TextView) view.findViewById(R.id.ValueTextView);
+		label.setText(getBrickLabel(view));
+
+		return view;
+	}
+
+	@Override
+	public View getPrototypeView(Context context) {
+		View prototypeView = View.inflate(context, R.layout.brick_jumping_sumo_nosound, null);
+
+		TextView label = (TextView) prototypeView.findViewById(R.id.ValueTextView);
+		label.setText(getBrickLabel(prototypeView));
+
+		return prototypeView;
+	}
+
+	@Override
+	public int getRequiredResources() {
+		return super.getRequiredResources() | Brick.JUMPING_SUMO;
+	}
 
 	@Override
 	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {

@@ -124,7 +124,7 @@ public class DefaultProjectCreatorJumpingSumo extends DefaultProjectCreator {
 
 		defaultJumpingSumoProject.getDefaultScene().addSprite(createJumpingSumoSprite(flipName, JumpingSumoBrickFactory.JumpingSumoBricks
 						.JUMPING_SUMO_TURN, (int) (500 / landscapePortraitFactor), (int)
-				(-150 / landscapePortraitFactor), flipFile));
+				(-250 / landscapePortraitFactor), flipFile));
 
 		//forward brick
 		String forwardName = context.getString(R.string.default_jumping_sumo_project_sprites_forward);
@@ -185,7 +185,8 @@ public class DefaultProjectCreatorJumpingSumo extends DefaultProjectCreator {
 				iconImageScaleFactor);
 
 		defaultJumpingSumoProject.getDefaultScene().addSprite(createJumpingSumoSprite(jumpLongName, JumpingSumoBrickFactory.JumpingSumoBricks
-						.JUMPING_SUMO_JUMP_LONG, (int) (500 / landscapePortraitFactor), 0, jumpLongFile));
+						.JUMPING_SUMO_JUMP_LONG, (int) (500 / landscapePortraitFactor), (int)
+				(-100 / landscapePortraitFactor), jumpLongFile));
 
 		//jump high brick
 		String jumpHighName = context.getString(R.string.default_jumping_sumo_project_sprites_jump_high);
@@ -196,7 +197,7 @@ public class DefaultProjectCreatorJumpingSumo extends DefaultProjectCreator {
 
 		defaultJumpingSumoProject.getDefaultScene().addSprite(createJumpingSumoSprite(jumpHighName, JumpingSumoBrickFactory.JumpingSumoBricks
 						.JUMPING_SUMO_JUMP_HIGH, (int) (500 / landscapePortraitFactor), (int)
-				(150 / landscapePortraitFactor), jumpHighFile));
+				(50 / landscapePortraitFactor), jumpHighFile));
 
 		//animation brick
 		String animationName = context.getString(R.string.default_jumping_sumo_project_sprites_animation);
@@ -208,13 +209,13 @@ public class DefaultProjectCreatorJumpingSumo extends DefaultProjectCreator {
 				0, (int) (325 / landscapePortraitFactor), animationFile));
 
 		//battery brick
-		String batteryName = context.getString(R.string.default_jumping_sumo_project_sprites_battery_status);
+		/*String batteryName = context.getString(R.string.default_jumping_sumo_project_sprites_battery_status);
 
 		defaultJumpingSumoProject.getDefaultScene().addSprite(createJumpingSumoBatterySprite(batteryName,
 				JumpingSumoBrickFactory.JumpingSumoBricks
 				.JUMPING_SUMO_SHOW_BATTERY_STATUS, -550, 350, 0, (byte) 0, (byte) 0, 0));
 
-		StorageHandler.getInstance().saveProject(defaultJumpingSumoProject);
+		StorageHandler.getInstance().saveProject(defaultJumpingSumoProject);*/
 
 		//sound brick
 		String soundName = context.getString(R.string.default_jumping_sumo_project_sprites_sound);
@@ -229,7 +230,7 @@ public class DefaultProjectCreatorJumpingSumo extends DefaultProjectCreator {
 				.JUMPING_SUMO_SOUND_BRICK_DEFAULT_VOLUME_PERCENT, 0));
 
 		//picture brick
-		String pictureName = context.getString(R.string.default_jumping_sumo_project_sprites_picture);
+		/*String pictureName = context.getString(R.string.default_jumping_sumo_project_sprites_picture);
 
 		File pictureFile = UtilFile.copyImageFromResourceIntoProject(projectName, sceneName, pictureName
 						+ Constants.IMAGE_STANDARD_EXTENSION, R.drawable.default_jumping_sumo_project_camera, context, true,
@@ -237,18 +238,29 @@ public class DefaultProjectCreatorJumpingSumo extends DefaultProjectCreator {
 
 		defaultJumpingSumoProject.getDefaultScene().addSprite(createJumpingSumoSprite(pictureName, JumpingSumoBrickFactory.JumpingSumoBricks
 				.JUMPING_SUMO_PICTURE, (int) (500 / landscapePortraitFactor), (int)
-				(325 / landscapePortraitFactor), pictureFile));
+				(325 / landscapePortraitFactor), pictureFile));*/
 
 		//No Sound brick
 		String noSoundName = context.getString(R.string.default_jumping_sumo_project_sprites_no_sound);
 
-		File recordFile = UtilFile.copyImageFromResourceIntoProject(projectName, sceneName, noSoundName
+		File noSoundFile = UtilFile.copyImageFromResourceIntoProject(projectName, sceneName, noSoundName
 						+ Constants.IMAGE_STANDARD_EXTENSION, R.drawable.default_jumping_sumo_project_sound_off, context, true,
 				iconImageScaleFactor);
 
 		defaultJumpingSumoProject.getDefaultScene().addSprite(createJumpingSumoSprite(noSoundName, JumpingSumoBrickFactory.JumpingSumoBricks
 				.JUMPING_SUMO_NO_SOUND, (int) (375 / landscapePortraitFactor), (int)
-				(325 / landscapePortraitFactor), recordFile));
+				(325 / landscapePortraitFactor), noSoundFile));
+
+		//Download brick
+		/*String downloadName = context.getString(R.string.default_jumping_sumo_project_sprites_download);
+
+		File downloadFile = UtilFile.copyImageFromResourceIntoProject(projectName, sceneName, downloadName
+						+ Constants.IMAGE_STANDARD_EXTENSION, R.drawable.default_jumping_sumo_project_download, context, true,
+				iconImageScaleFactor);
+
+		defaultJumpingSumoProject.getDefaultScene().addSprite(createJumpingSumoSprite(downloadName, JumpingSumoBrickFactory.JumpingSumoBricks
+				.JUMPING_SUMO_DOWNLOAD, (int) (500 / landscapePortraitFactor), (int)
+				(190 / landscapePortraitFactor), downloadFile));*/
 
 		return defaultJumpingSumoProject;
 	}
