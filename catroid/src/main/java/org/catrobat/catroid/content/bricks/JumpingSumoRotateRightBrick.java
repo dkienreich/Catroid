@@ -41,7 +41,6 @@ public class JumpingSumoRotateRightBrick extends JumpingSumoRotateBrick {
 
 	private static final long serialVersionUID = 1L;
 	private static final String TAG = JumpingSumoRotateRightBrick.class.getSimpleName();
-	private long WAIT_TIME;
 
 	public JumpingSumoRotateRightBrick(float degree) {
 		super(degree);
@@ -59,7 +58,7 @@ public class JumpingSumoRotateRightBrick extends JumpingSumoRotateBrick {
 	@Override
 	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
 		sequence.addAction(sprite.getActionFactory().createJumpingSumoRotateRightAction(sprite,
-				getFormulaWithBrickField(BrickField.JUMPING_SUMO_ROTATE), WAIT_TIME));
+				getFormulaWithBrickField(BrickField.JUMPING_SUMO_ROTATE)));
 		return null;
 	}
 

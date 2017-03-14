@@ -33,11 +33,10 @@ import java.util.List;
 
 public class JumpingSumoTurnBrick extends JumpingSumoBasicBrick {
 	private static final long serialVersionUID = 1L;
-	private long WAIT_TIME;
 
 	@Override
 	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
-		sequence.addAction(sprite.getActionFactory().createJumpingSumoTurnAction(WAIT_TIME));
+		sequence.addAction(sprite.getActionFactory().createJumpingSumoTurnAction());
 		return null;
 	}
 

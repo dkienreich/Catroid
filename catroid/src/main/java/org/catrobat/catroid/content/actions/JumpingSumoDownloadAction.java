@@ -30,13 +30,11 @@ import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.parrot.arsdk.arcontroller.ARDeviceController;
 
 import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoDeviceController;
-import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoSDCardModule;
 
 public class JumpingSumoDownloadAction extends TemporalAction {
 
 	private ARDeviceController deviceController;
 	private JumpingSumoDeviceController controller;
-	private JumpingSumoSDCardModule mSDCardModule;
 	private static final String TAG = JumpingSumoDownloadAction.class.getSimpleName();
 
 	@Override
@@ -45,9 +43,8 @@ public class JumpingSumoDownloadAction extends TemporalAction {
 		controller = JumpingSumoDeviceController.getInstance();
 		deviceController = controller.getDeviceController();
 
-			Log.d(TAG, "download picture");
-			mSDCardModule.getallFlightMedias();
-			Log.d(TAG, "download finished");
+		Log.d(TAG, "download picture");
+		Log.d(TAG, "download finished");
 
 	}
 
