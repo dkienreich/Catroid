@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -32,6 +32,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
 
+import org.catrobat.catroid.content.SingleSprite;
 import org.catrobat.catroid.content.Sprite;
 
 public class XStreamSpriteConverter extends ReflectionConverter {
@@ -66,6 +67,9 @@ public class XStreamSpriteConverter extends ReflectionConverter {
 			} catch (ClassNotFoundException exception) {
 				Log.e(TAG, "Sprite class not found : " + result.toString(), exception);
 			}
+		} else {
+			Sprite sprite = (Sprite) reflectionProvider.newInstance(SingleSprite.class);
+			return super.doUnmarshal(sprite, reader, context);
 		}
 		return super.doUnmarshal(result, reader, context);
 	}

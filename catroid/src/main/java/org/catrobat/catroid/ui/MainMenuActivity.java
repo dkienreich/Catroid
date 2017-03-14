@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -31,11 +31,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
+import android.support.test.espresso.idling.CountingIdlingResource;
+import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.TextAppearanceSpan;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -80,11 +86,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Locale;
 import java.util.concurrent.locks.Lock;
 
 public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompleteListener {
 
-	private static final String TAG = ProjectActivity.class.getSimpleName();
+	private static final String TAG = MainMenuActivity.class.getSimpleName();
 
 	private static final String START_PROJECT = BuildConfig.START_PROJECT;
 	private static final Boolean STANDALONE_MODE = BuildConfig.FEATURE_APK_GENERATOR_ENABLED;
@@ -100,7 +107,9 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 	private Lock viewSwitchLock = new ViewSwitchLock();
 	private CallbackManager callbackManager;
 	private SignInDialog signInDialog;
-	private boolean lockBackButtonForAsync = false;
+	private Menu mainMenu;
+
+	CountingIdlingResource idlingResource = new CountingIdlingResource(TAG);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -148,15 +157,16 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 		if (!Utils.checkForExternalStorageAvailableAndDisplayErrorIfNot(this)) {
 			return;
 		}
-
 		AppEventsLogger.activateApp(this);
 
 		SettingsActivity.setLegoMindstormsNXTSensorChooserEnabled(this, false);
+		SettingsActivity.setLegoMindstormsEV3SensorChooserEnabled(this, false);
 
 		SettingsActivity.setDroneChooserEnabled(this, false);
 
 		findViewById(R.id.progress_circle).setVisibility(View.VISIBLE);
 		final Activity activity = this;
+		idlingResource.increment();
 		Runnable r = new Runnable() {
 			@Override
 			public void run() {
@@ -191,7 +201,33 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_main_menu, menu);
+		mainMenu = menu;
+
+		final MenuItem scratchConverterMenuItem = menu.findItem(R.id.menu_scratch_converter);
+		if (scratchConverterMenuItem != null) {
+			final String title = getString(R.string.main_menu_scratch_converter);
+			final String beta = getString(R.string.beta).toUpperCase(Locale.getDefault());
+			final SpannableString spanTitle = new SpannableString(title + " " + beta);
+			final int begin = title.length() + 1;
+			final int end = begin + beta.length();
+			final int betaLabelColor = ContextCompat.getColor(this, R.color.beta_label_color);
+			spanTitle.setSpan(new ForegroundColorSpan(betaLabelColor), begin, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			scratchConverterMenuItem.setTitle(spanTitle);
+		}
 		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		MenuItem logout = mainMenu.findItem(R.id.menu_logout);
+		MenuItem login = mainMenu.findItem(R.id.menu_login);
+		logout.setVisible(Utils.isUserLoggedIn(this));
+		login.setVisible(!Utils.isUserLoggedIn(this));
+
+		if (!BuildConfig.FEATURE_SCRATCH_CONVERTER_ENABLED) {
+			mainMenu.removeItem(R.id.menu_scratch_converter);
+		}
+		return true;
 	}
 
 	@Override
@@ -227,6 +263,7 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 			intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 			startActivity(intent);
 		}
+		idlingResource.decrement();
 	}
 
 	// needed because of android:onClick in activity_main_menu.xml
@@ -238,7 +275,6 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 		LoadProjectTask loadProjectTask = new LoadProjectTask(this, Utils.getCurrentProjectName(this), true, true);
 		loadProjectTask.setOnLoadProjectCompleteListener(this);
 		findViewById(R.id.main_menu_buttons_container).setVisibility(View.GONE);
-		lockBackButtonForAsync = true;
 		loadProjectTask.execute();
 	}
 
@@ -249,7 +285,6 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 		LoadProjectTask loadProjectTask = new LoadProjectTask(this, projectName, true, true);
 		loadProjectTask.setOnLoadProjectCompleteListener(this);
 		findViewById(R.id.main_menu_buttons_container).setVisibility(View.GONE);
-		lockBackButtonForAsync = true;
 		loadProjectTask.execute();
 	}
 
@@ -262,7 +297,6 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 			Intent intent = new Intent(MainMenuActivity.this, ProjectActivity.class);
 			startActivity(intent);
 		}
-		lockBackButtonForAsync = false;
 	}
 
 	public void handleNewButton(View view) {
@@ -366,14 +400,8 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		return (keyCode == KeyEvent.KEYCODE_BACK && !lockBackButtonForAsync);
-	}
-
-	@Override
 	public void onLoadProjectFailure() {
 		findViewById(R.id.main_menu_buttons_container).setVisibility(View.VISIBLE);
-		lockBackButtonForAsync = false;
 	}
 
 	public void initializeFacebookSdk() {
@@ -505,5 +533,11 @@ public class MainMenuActivity extends BaseActivity implements OnLoadProjectCompl
 		//ProjectManager.getInstance().getCurrentProject().getUserVariables().resetAllUserVariables();
 		Intent intent = new Intent(this, PreStageActivity.class);
 		startActivityForResult(intent, PreStageActivity.REQUEST_RESOURCES_INIT);
+	}
+
+	@VisibleForTesting
+	@NonNull
+	public IdlingResource getIdlingResource() {
+		return idlingResource;
 	}
 }

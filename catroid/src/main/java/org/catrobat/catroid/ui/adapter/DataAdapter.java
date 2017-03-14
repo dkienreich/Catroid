@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -225,11 +225,7 @@ public class DataAdapter extends BaseAdapter implements ActionModeActivityAdapte
 		}
 
 		if (holder.text1 != null) {
-			if (currentDataItem instanceof UserVariable) {
-				holder.text1.setText(nameOfCurrentDataItem.concat(":"));
-			} else {
-				holder.text1.setText(nameOfCurrentDataItem);
-			}
+			holder.text1.setText(nameOfCurrentDataItem);
 		}
 
 		if (holder.text2 != null) {

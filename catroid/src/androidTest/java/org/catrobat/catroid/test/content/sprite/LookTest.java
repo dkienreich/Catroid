@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,6 +24,8 @@ package org.catrobat.catroid.test.content.sprite;
 
 import android.test.InstrumentationTestCase;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 
@@ -36,6 +38,7 @@ import org.catrobat.catroid.content.SingleSprite;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.test.utils.Reflection;
 import org.catrobat.catroid.test.utils.Reflection.ParameterList;
+import org.catrobat.catroid.test.utils.TestUtils;
 import org.catrobat.catroid.utils.TouchUtil;
 
 public class LookTest extends InstrumentationTestCase {
@@ -384,5 +387,67 @@ public class LookTest extends InstrumentationTestCase {
 		float squareRootOfScalar = (float) Math.sqrt(squareX + squareY);
 
 		assertEquals("Wrong distance to value!", touchPosition, squareRootOfScalar);
+	}
+
+	public void testTouchDownFlipped() {
+		final int width = 1;
+		final int height = 1;
+
+		Look look = new Look(sprite) {
+			{
+				pixmap = TestUtils.createRectanglePixmap(width, height, Color.RED);
+			}
+		};
+		look.setSize(width, height);
+
+		assertTrue("Flipped look not touched", look.doTouchDown(0, 0, 0));
+	}
+
+	public void testTouchDownFlippedWithAlpha() {
+		final int width = 2;
+		final int height = 1;
+
+		Look look = new Look(sprite) {
+			{
+				pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+				pixmap.drawPixel(0, 0, Color.RED.toIntBits());
+			}
+		};
+		look.setSize(width, height);
+
+		assertTrue("Look not touched", look.doTouchDown(0, 0, 0));
+		assertFalse("Look touched on alpha shouldn't trigger touch down", look.doTouchDown(1, 0, 0));
+	}
+
+	public void testCloneValues() {
+		Look origin = new Look(null);
+		origin.setSizeInUserInterfaceDimensionUnit(12);
+		origin.setPositionInUserInterfaceDimensionUnit(4, 12);
+		origin.setColorInUserInterfaceDimensionUnit(42);
+		origin.setTransparencyInUserInterfaceDimensionUnit(7);
+		origin.setRotationMode(Look.ROTATION_STYLE_LEFT_RIGHT_ONLY);
+		origin.setBrightnessInUserInterfaceDimensionUnit(3);
+		origin.setDirectionInUserInterfaceDimensionUnit(8);
+		origin.setLookVisible(false);
+
+		Look clone = new Look(null);
+		origin.copyTo(clone);
+
+		assertEquals("Size differs", origin.getSizeInUserInterfaceDimensionUnit(),
+				clone.getSizeInUserInterfaceDimensionUnit());
+		assertEquals("X position differs", origin.getXInUserInterfaceDimensionUnit(),
+				clone.getXInUserInterfaceDimensionUnit());
+		assertEquals("Y position differs", origin.getYInUserInterfaceDimensionUnit(),
+				clone.getYInUserInterfaceDimensionUnit());
+		assertEquals("Color differs", origin.getColorInUserInterfaceDimensionUnit(),
+				clone.getColorInUserInterfaceDimensionUnit());
+		assertEquals("Transparency differs", origin.getTransparencyInUserInterfaceDimensionUnit(), clone
+				.getTransparencyInUserInterfaceDimensionUnit());
+		assertEquals("Rotation mode differs", origin.getRotationMode(), clone.getRotationMode());
+		assertEquals("Brightness differs", origin.getBrightnessInUserInterfaceDimensionUnit(),
+				clone.getBrightnessInUserInterfaceDimensionUnit());
+		assertEquals("Direction differs", origin.getDirectionInUserInterfaceDimensionUnit(),
+				clone.getDirectionInUserInterfaceDimensionUnit());
+		assertEquals("Visibility differs", origin.isLookVisible(), clone.isLookVisible());
 	}
 }

@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -108,7 +108,7 @@ public class MidiToProjectConverter {
 			if (track.size() > 0) {
 				String trackName = trackNames.get(i);
 				i++;
-				project.addTrack(trackName, track);
+				project.putTrack(trackName, track);
 			}
 		}
 

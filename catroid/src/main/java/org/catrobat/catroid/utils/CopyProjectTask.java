@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -28,7 +28,7 @@ import android.util.Log;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.io.StorageHandler;
-import org.catrobat.catroid.ui.fragment.ProjectsListFragment;
+import org.catrobat.catroid.ui.fragment.ProjectListFragment;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,10 +36,10 @@ import java.io.IOException;
 public class CopyProjectTask extends AsyncTask<String, Long, Boolean> {
 	private static final String TAG = CopyProjectTask.class.getSimpleName();
 
-	private ProjectsListFragment parentFragment;
+	private ProjectListFragment parentFragment;
 	private String newName;
 
-	public CopyProjectTask(ProjectsListFragment parentActivity) {
+	public CopyProjectTask(ProjectListFragment parentActivity) {
 		this.parentFragment = parentActivity;
 	}
 
@@ -90,6 +90,7 @@ public class CopyProjectTask extends AsyncTask<String, Long, Boolean> {
 		ToastUtil.showSuccess(parentFragment.getActivity(),
 				parentFragment.getString(R.string.project_name) + " " + newName + " "
 						+ parentFragment.getString(R.string.copy_project_finished));
-		parentFragment.onCopyProject();
+		parentFragment.clearCheckedItems();
+		parentFragment.initializeList();
 	}
 }

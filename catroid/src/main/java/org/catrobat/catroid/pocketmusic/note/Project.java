@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -37,6 +37,7 @@ public class Project implements Serializable {
 	private int beatsPerMinute;
 	private MusicalBeat beat;
 	private Map<String, Track> tracks;
+	private String fileName;
 
 	public Project(String name, MusicalBeat beat, int beatsPerMinute) {
 		this.name = name;
@@ -77,7 +78,7 @@ public class Project implements Serializable {
 		return beat;
 	}
 
-	public void addTrack(String trackName, Track track) {
+	public void putTrack(String trackName, Track track) {
 		tracks.put(trackName, track);
 	}
 
@@ -143,6 +144,14 @@ public class Project implements Serializable {
 		}
 
 		return false;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -43,16 +43,13 @@ public class FlashBrick extends BrickBaseType {
 
 	private transient View prototypeView;
 
-	private String[] spinnerValues;
 	private int spinnerSelectionID;
 
 	public FlashBrick() {
-		spinnerValues = new String[2];
 		spinnerSelectionID = FLASH_ON;
 	}
 
 	public FlashBrick(int onOrOff) {
-		spinnerValues = new String[2];
 		spinnerSelectionID = onOrOff;
 	}
 
@@ -102,6 +99,7 @@ public class FlashBrick extends BrickBaseType {
 	}
 
 	private ArrayAdapter<String> createArrayAdapter(Context context) {
+		String[] spinnerValues = new String[2];
 		spinnerValues[FLASH_OFF] = context.getString(R.string.brick_flash_off);
 		spinnerValues[FLASH_ON] = context.getString(R.string.brick_flash_on);
 

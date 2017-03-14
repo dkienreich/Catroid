@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -92,29 +92,6 @@ public class GlideToActionTest extends AndroidTestCase {
 		assertEquals("PlaceAtBrick failed to place Sprite at minimum x float value", (float) Integer.MIN_VALUE,
 				sprite.look.getXInUserInterfaceDimensionUnit());
 		assertEquals("PlaceAtBrick failed to place Sprite at minimum y float value", (float) Integer.MIN_VALUE,
-				sprite.look.getYInUserInterfaceDimensionUnit());
-	}
-
-	public void testPauseResume() throws InterruptedException {
-		assertEquals("Unexpected initial sprite x position", 0f, sprite.look.getXInUserInterfaceDimensionUnit());
-		assertEquals("Unexpected initial sprite y position", 0f, sprite.look.getYInUserInterfaceDimensionUnit());
-		sprite.look.setWidth(100.0f);
-		sprite.look.setHeight(50.0f);
-
-		Action action = sprite.getActionFactory().createGlideToAction(sprite, xPosition, yPosition, duration);
-		long currentTimeDelta = System.currentTimeMillis();
-		do {
-			currentTimeDelta = System.currentTimeMillis() - currentTimeDelta;
-			if (currentTimeDelta > 400) {
-				sprite.pause();
-				Thread.sleep(200);
-				sprite.resume();
-			}
-		} while (!action.act(currentTimeDelta));
-
-		assertEquals("Incorrect sprite x position after GlideToBrick executed", X_POSITION,
-				sprite.look.getXInUserInterfaceDimensionUnit());
-		assertEquals("Incorrect sprite y position after GlideToBrick executed", Y_POSITION,
 				sprite.look.getYInUserInterfaceDimensionUnit());
 	}
 

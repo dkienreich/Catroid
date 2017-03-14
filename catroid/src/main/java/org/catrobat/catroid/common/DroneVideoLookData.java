@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -28,9 +28,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.parrot.freeflight.ui.gl.GLBGVideoSprite;
 
 import org.catrobat.catroid.ProjectManager;
@@ -85,10 +83,6 @@ public class DroneVideoLookData extends LookData {
 	}
 
 	@Override
-	public void setTextureRegion() {
-		this.textureRegion = new TextureRegion(new Texture(getPixmap()));
-	}
-
 	public void draw(Batch batch, float parentAlpha) {
 		if (firstStart) {
 			videoTexture = new GLBGVideoSprite();

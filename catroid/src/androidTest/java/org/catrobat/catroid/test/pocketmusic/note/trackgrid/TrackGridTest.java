@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,6 @@ package org.catrobat.catroid.test.pocketmusic.note.trackgrid;
 
 import android.test.AndroidTestCase;
 
-import org.catrobat.catroid.pocketmusic.note.MusicalInstrument;
 import org.catrobat.catroid.pocketmusic.note.trackgrid.TrackGrid;
 
 public class TrackGridTest extends AndroidTestCase {
@@ -45,7 +44,7 @@ public class TrackGridTest extends AndroidTestCase {
 	}
 
 	public void testEquals3() {
-		TrackGrid trackGrid1 = TrackGridTestDataFactory.createSemiComplexTrackGrid(MusicalInstrument.ACOUSTIC_GRAND_PIANO);
+		TrackGrid trackGrid1 = TrackGridTestDataFactory.createSemiComplexTrackGrid();
 		TrackGrid trackGrid2 = TrackGridTestDataFactory.createSimpleTrackGrid();
 
 		assertFalse("TrackGrid equal", trackGrid1.equals(trackGrid2));
@@ -66,7 +65,7 @@ public class TrackGridTest extends AndroidTestCase {
 	}
 
 	public void testHashCode3() {
-		TrackGrid trackGrid1 = TrackGridTestDataFactory.createSemiComplexTrackGrid(MusicalInstrument.ACOUSTIC_GRAND_PIANO);
+		TrackGrid trackGrid1 = TrackGridTestDataFactory.createSemiComplexTrackGrid();
 		TrackGrid trackGrid2 = TrackGridTestDataFactory.createSimpleTrackGrid();
 
 		assertFalse("HashCode equal", trackGrid1.hashCode() == trackGrid2.hashCode());

@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -41,18 +41,15 @@ public class ChooseCameraBrick extends BrickBaseType {
 
 	private transient View prototypeView;
 
-	private String[] spinnerValues;
 	private int spinnerSelectionID;
 	private static final int BACK = 0;
 	private static final int FRONT = 1;
 
 	public ChooseCameraBrick() {
-		spinnerValues = new String[2];
 		spinnerSelectionID = FRONT;
 	}
 
 	public ChooseCameraBrick(int frontOrBack) {
-		spinnerValues = new String[2];
 		spinnerSelectionID = frontOrBack;
 	}
 
@@ -102,6 +99,7 @@ public class ChooseCameraBrick extends BrickBaseType {
 	}
 
 	private ArrayAdapter<String> createArrayAdapter(Context context) {
+		String[] spinnerValues = new String[2];
 		spinnerValues[BACK] = context.getString(R.string.choose_camera_back);
 		spinnerValues[FRONT] = context.getString(R.string.choose_camera_front);
 

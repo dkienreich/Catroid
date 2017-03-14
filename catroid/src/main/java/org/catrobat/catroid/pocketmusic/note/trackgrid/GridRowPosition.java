@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -23,16 +23,17 @@
 package org.catrobat.catroid.pocketmusic.note.trackgrid;
 
 import org.catrobat.catroid.pocketmusic.note.NoteLength;
+import org.catrobat.catroid.pocketmusic.note.Project;
+
+import java.util.List;
 
 public class GridRowPosition {
 
 	private int columnStartIndex;
-	private final long startTicksInTrack;
 	private final NoteLength noteLength;
 
-	public GridRowPosition(int columnStartIndex, long startTicksInTrack, NoteLength noteLength) {
+	public GridRowPosition(int columnStartIndex, NoteLength noteLength) {
 		this.columnStartIndex = columnStartIndex;
-		this.startTicksInTrack = startTicksInTrack;
 		this.noteLength = noteLength;
 	}
 
@@ -49,7 +50,7 @@ public class GridRowPosition {
 	}
 
 	public long getStartTicksInTrack() {
-		return startTicksInTrack;
+		return columnStartIndex * NoteLength.QUARTER.toTicks(Project.DEFAULT_BEATS_PER_MINUTE);
 	}
 
 	@Override
@@ -57,7 +58,6 @@ public class GridRowPosition {
 		int hashCode = 23;
 		int primeWithGoodCollisionPrevention = 31;
 		hashCode = primeWithGoodCollisionPrevention * hashCode + columnStartIndex;
-		hashCode = primeWithGoodCollisionPrevention * hashCode + (int) startTicksInTrack;
 		hashCode = primeWithGoodCollisionPrevention * hashCode + noteLength.hashCode();
 		return hashCode;
 	}
@@ -66,7 +66,15 @@ public class GridRowPosition {
 	public boolean equals(Object o) {
 		GridRowPosition reference = (GridRowPosition) o;
 		return reference.columnStartIndex == columnStartIndex
-				&& reference.startTicksInTrack == startTicksInTrack
 				&& reference.noteLength.equals(noteLength);
+	}
+
+	public static int getGridRowPositionIndexInList(List<GridRowPosition> gridRowPositions, int columnStartIndex) {
+		for (int i = 0; i < gridRowPositions.size(); i++) {
+			if (gridRowPositions.get(i).getColumnStartIndex() == columnStartIndex) {
+				return i;
+			}
+		}
+		return -1;
 	}
 }

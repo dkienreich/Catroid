@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Catroid: An on-device visual programming system for Android devices
-  ~ Copyright (C) 2010-2016 The Catrobat Team
+  ~ Copyright (C) 2010-2017 The Catrobat Team
   ~ (<http://developer.catrobat.org/credits>)
   ~
   ~ This program is free software: you can redistribute it and/or modify
@@ -24,16 +24,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/groups_create"
-        android:showAsAction="never"
-        android:title="@string/groups_create">
-    </item>
-    <item
-        android:id="@+id/backpack"
-        android:showAsAction="never"
-        android:visible="false"
-        android:title="@string/backpack" />
-    <item
         android:id="@+id/delete"
         android:showAsAction="never"
         android:title="@string/delete"/>
@@ -45,6 +35,23 @@
         android:id="@+id/rename"
         android:showAsAction="never"
         android:title="@string/rename"/>
+    <item
+        android:id="@+id/backpack"
+        android:showAsAction="never"
+        android:visible="false"
+        android:title="@string/backpack" />
+    <item
+        android:id="@+id/groups_create"
+        android:showAsAction="never"
+        android:title="@string/groups_create" />
+    <item
+        android:id="@+id/new_scene"
+        android:showAsAction="never"
+        android:title="@string/new_scene_dialog_title"/>
+    <item
+        android:id="@+id/upload"
+        android:showAsAction="never"
+        android:title="@string/upload_button"/>
     <item
         android:id="@+id/show_details"
         android:showAsAction="never"
@@ -64,14 +71,6 @@
         android:showAsAction="never"
         android:title="@string/move"
         android:visible="false"/>
-    <item
-        android:id="@+id/upload"
-        android:showAsAction="never"
-        android:title="@string/upload_button"/>
-    <item
-        android:id="@+id/new_scene"
-        android:showAsAction="never"
-        android:title="@string/new_scene_dialog_title"/>
     <item
         android:id="@+id/merge_scene"
         android:showAsAction="never"

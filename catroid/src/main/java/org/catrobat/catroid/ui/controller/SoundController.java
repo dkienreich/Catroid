@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -119,6 +119,8 @@ public final class SoundController {
 
 				if ("primary".equalsIgnoreCase(type)) {
 					return Environment.getExternalStorageDirectory() + "/" + split[1];
+				} else {
+					return "storage/" + split[0] + "/" + split[1];
 				}
 
 				// TODO handle non-primary volumes
@@ -226,6 +228,8 @@ public final class SoundController {
 			public void onClick(View view) {
 				if (soundAdapter.getSelectMode() != ListView.CHOICE_MODE_NONE) {
 					holder.checkbox.setChecked(!holder.checkbox.isChecked());
+				} else {
+					soundAdapter.getOnSoundEditListener().onSoundEdit(view);
 				}
 			}
 		};
@@ -390,7 +394,7 @@ public final class SoundController {
 		soundInfo.isPlaying = false;
 	}
 
-	public String soundFileAlreadyInBackPackDirectory(SoundInfo soundInfoToCheck) {
+	private String soundFileAlreadyInBackPackDirectory(SoundInfo soundInfoToCheck) {
 		if (soundInfoToCheck == null) {
 			return null;
 		}
@@ -405,7 +409,7 @@ public final class SoundController {
 		return null;
 	}
 
-	public File copySoundBackPack(SoundInfo selectedSoundInfo, String newSoundInfoTitle, boolean copyFromBackpack) {
+	private File copySoundBackPack(SoundInfo selectedSoundInfo, String newSoundInfoTitle, boolean copyFromBackpack) {
 		try {
 			return StorageHandler.getInstance().copySoundFileBackPack(selectedSoundInfo, newSoundInfoTitle,
 					copyFromBackpack);
@@ -472,22 +476,25 @@ public final class SoundController {
 		}
 	}
 
-	public SoundInfo updateSoundBackPackAfterInsert(String title, SoundInfo currentSoundInfo, String
-			existingFileNameInBackPackDirectory, boolean addToHiddenBackpack) {
-		SoundInfo newSoundInfo = new SoundInfo();
-		newSoundInfo.setBackpackSoundInfo(true);
-		newSoundInfo.setTitle(title);
-
+	private SoundInfo updateSoundBackPackAfterInsert(String title, SoundInfo currentSoundInfo, String
+			existingFileNameInBackPackDirectory, boolean addToHiddenBackpack, File backPackedFile) {
+		String fileName = null;
 		if (existingFileNameInBackPackDirectory == null) {
 			if (currentSoundInfo != null) {
-				String fileName = currentSoundInfo.getSoundFileName();
+				fileName = currentSoundInfo.getSoundFileName();
+				String hash = backPackedFile == null ? fileName.substring(0, 32) : Utils.md5Checksum(backPackedFile);
+				if (backPackedFile == null) {
+					Log.e(TAG, "backpacked file was null, file hash is possibly wrong");
+				}
 				String fileFormat = fileName.substring(fileName.lastIndexOf('.'), fileName.length());
-				fileName = fileName.substring(0, fileName.indexOf('_') + 1) + title + fileFormat;
-				newSoundInfo.setSoundFileName(fileName);
+				fileName = hash + "_" + title + fileFormat;
 			}
 		} else {
-			newSoundInfo.setSoundFileName(existingFileNameInBackPackDirectory);
+			fileName = existingFileNameInBackPackDirectory;
 		}
+
+		SoundInfo newSoundInfo = new SoundInfo(title, fileName);
+		newSoundInfo.setBackpackSoundInfo(true);
 
 		if (addToHiddenBackpack) {
 			BackPackListManager.getInstance().addSoundToHiddenBackpack(newSoundInfo);
@@ -498,14 +505,12 @@ public final class SoundController {
 		return newSoundInfo;
 	}
 
-	public SoundInfo updateSoundAdapter(SoundInfo soundInfo,
+	private SoundInfo updateSoundAdapter(SoundInfo soundInfo,
 			SoundBaseAdapter adapter, String title, boolean delete, boolean fromHiddenBackPack) {
-		SoundInfo newSoundInfo = new SoundInfo();
-		newSoundInfo.setTitle(title);
 		String fileName = soundInfo.getSoundFileName();
 		String fileFormat = fileName.substring(fileName.lastIndexOf('.'), fileName.length());
 		fileName = fileName.substring(0, fileName.indexOf('_') + 1) + title + fileFormat;
-		newSoundInfo.setSoundFileName(fileName);
+		SoundInfo newSoundInfo = new SoundInfo(title, fileName);
 		ProjectManager.getInstance().getCurrentSprite().getSoundList().add(newSoundInfo);
 
 		if (delete) {
@@ -608,7 +613,7 @@ public final class SoundController {
 		if (audioPath == null && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
 			audioPath = getPathForVersionAboveEqualsVersion19(activity, cursorLoader.getUri());
 		}
-		if (audioPath.equalsIgnoreCase("")) {
+		if (audioPath == null || audioPath.equalsIgnoreCase("")) {
 			Utils.showErrorDialog(activity, R.string.error_load_sound);
 			audioPath = "";
 			return audioPath;
@@ -670,14 +675,10 @@ public final class SoundController {
 
 	public SoundInfo updateSoundAdapter(String name, String fileName, List<SoundInfo> soundList, SoundFragment
 			fragment) {
-		SoundInfo soundInfoToCheck = new SoundInfo();
-		soundInfoToCheck.setSoundFileName(fileName);
-		soundInfoToCheck.setTitle(name);
+		SoundInfo soundInfoToCheck = new SoundInfo(name, fileName);
 		name = Utils.getUniqueSoundName(soundInfoToCheck, false);
 
-		SoundInfo soundInfo = new SoundInfo();
-		soundInfo.setSoundFileName(fileName);
-		soundInfo.setTitle(name);
+		SoundInfo soundInfo = new SoundInfo(name, fileName);
 		soundList.add(soundInfo);
 
 		fragment.updateSoundAdapter(soundInfo);
@@ -764,14 +765,15 @@ public final class SoundController {
 		return backPack(selectedSoundInfo, newSoundInfoTitle, true);
 	}
 
-	public SoundInfo backPack(SoundInfo selectedSoundInfo, String newSoundInfoTitle, boolean addToHiddenBackpack) {
+	private SoundInfo backPack(SoundInfo selectedSoundInfo, String newSoundInfoTitle, boolean addToHiddenBackpack) {
 		String existingFileNameInBackPackDirectory = soundFileAlreadyInBackPackDirectory(selectedSoundInfo);
+		File backPackedSound = null;
 		if (existingFileNameInBackPackDirectory == null && selectedSoundInfo != null
 				&& selectedSoundInfo.getAbsolutePath() != null && !selectedSoundInfo.getAbsolutePath().isEmpty()) {
-			copySoundBackPack(selectedSoundInfo, newSoundInfoTitle, false);
+			backPackedSound = copySoundBackPack(selectedSoundInfo, newSoundInfoTitle, false);
 		}
 		return updateSoundBackPackAfterInsert(newSoundInfoTitle, selectedSoundInfo,
-				existingFileNameInBackPackDirectory, addToHiddenBackpack);
+				existingFileNameInBackPackDirectory, addToHiddenBackpack, backPackedSound);
 	}
 
 	public SoundInfo unpack(SoundInfo currentSoundInfo, boolean deleteUnpackedItems, boolean fromHiddenBackPack) {

@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -117,13 +117,6 @@ public class Scene implements Serializable {
 			return;
 		}
 		spriteList.add(sprite);
-	}
-
-	private synchronized void addSprite(int index, Sprite sprite) {
-		if (spriteList.contains(sprite)) {
-			return;
-		}
-		spriteList.add(index, sprite);
 	}
 
 	public synchronized boolean removeSprite(Sprite sprite) {
@@ -248,6 +241,7 @@ public class Scene implements Serializable {
 	}
 
 	public void removeAllClones() {
+		ProjectManager.getInstance().getCurrentProject().removeInvalidVariablesAndLists(dataContainer);
 		dataContainer.removeVariablesOfClones();
 		for (Sprite s : new ArrayList<>(spriteList)) {
 			if (s.isClone) {
@@ -468,6 +462,7 @@ public class Scene implements Serializable {
 	}
 
 	public synchronized void replaceBackgroundSprite(Sprite unpackedSprite) {
+		unpackedSprite.setName(spriteList.get(0).getName());
 		spriteList.set(0, unpackedSprite);
 	}
 
@@ -517,16 +512,5 @@ public class Scene implements Serializable {
 			result.addAll(sprite.getAllBricks());
 		}
 		return result;
-	}
-
-	public void convertSpritesToSingleSprites() {
-		for (int index = 0; index < spriteList.size(); index++) {
-			Sprite sprite = spriteList.get(index);
-			sprite.setConvertToSingleSprite(true);
-			Sprite convertedSprite = sprite.shallowClone();
-			removeSprite(sprite);
-			addSprite(index, convertedSprite);
-		}
-		project.refreshSpriteReferences();
 	}
 }

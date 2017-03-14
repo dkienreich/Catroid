@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Catroid: An on-device visual programming system for Android devices
-  ~ Copyright (C) 2010-2016 The Catrobat Team
+  ~ Copyright (C) 2010-2017 The Catrobat Team
   ~ (<http://developer.catrobat.org/credits>)
   ~
   ~ This program is free software: you can redistribute it and/or modify
@@ -49,8 +49,7 @@
     android:queryHint="@string/search_hint"
     android:iconifiedByDefault="false"
     android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:privateImeOptions="nm" />
+    android:focusableInTouchMode="true" />
 
 <ImageButton
     android:id="@+id/mic_button_image_scratch"

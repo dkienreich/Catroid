@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -32,14 +32,14 @@ public final class GridRowPositionTestDataFactory {
 	}
 
 	public static GridRowPosition createSimpleGridRowPosition() {
-		return new GridRowPosition(0, 0, NoteLength.QUARTER);
+		return new GridRowPosition(0, NoteLength.QUARTER);
 	}
 
 	public static GridRowPosition createGridRowPositionWithOffset() {
-		return new GridRowPosition(4, 100, NoteLength.QUARTER);
+		return new GridRowPosition(4, NoteLength.QUARTER);
 	}
 
 	public static GridRowPosition createGridRowPositionWithHalf() {
-		return new GridRowPosition(4, 100, NoteLength.HALF);
+		return new GridRowPosition(4, NoteLength.HALF);
 	}
 }

@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -76,7 +76,7 @@ public class LegoNXTSensorInfoTests extends BaseActivityInstrumentationTestCase<
 
 		boolean nxtBricksEnabledStart = SettingsActivity.isMindstormsNXTSharedPreferenceEnabled(applicationContext);
 
-		boolean nxtDialogDisabledStart = SettingsActivity.getShowLegoMindstormsSensorInfoDialog(applicationContext);
+		boolean nxtDialogDisabledStart = SettingsActivity.getShowLegoNXTMindstormsSensorInfoDialog(applicationContext);
 
 		if (!nxtBricksEnabledStart) {
 			solo.clickOnActionBarItem(R.id.settings);
@@ -213,7 +213,7 @@ public class LegoNXTSensorInfoTests extends BaseActivityInstrumentationTestCase<
 	public void testNXTSensorConfigurationDialog() throws InterruptedException {
 		createBrickTestproject(projectNameNxt);
 		boolean nxtBricksEnabledStart = SettingsActivity.isMindstormsNXTSharedPreferenceEnabled(applicationContext);
-		boolean nxtDialogDisabledStart = SettingsActivity.getShowLegoMindstormsSensorInfoDialog(applicationContext);
+		boolean nxtDialogDisabledStart = SettingsActivity.getShowLegoNXTMindstormsSensorInfoDialog(applicationContext);
 
 		if (!nxtBricksEnabledStart) {
 			solo.clickOnActionBarItem(R.id.settings);

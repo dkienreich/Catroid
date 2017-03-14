@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -24,6 +24,7 @@ package org.catrobat.catroid.stage;
 
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.PointF;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -115,6 +116,7 @@ public class StageListener implements ApplicationListener {
 	private boolean paused = false;
 	private boolean finished = false;
 	private boolean reloadProject = false;
+	public boolean firstFrameDrawn = false;
 
 	private static boolean checkIfAutomaticScreenshotShouldBeTaken = true;
 	private boolean makeAutomaticScreenshot = false;
@@ -225,7 +227,6 @@ public class StageListener implements ApplicationListener {
 				stage.addActor(penActor);
 				addPenActor = false;
 			}
-			sprite.resume();
 		}
 		passepartout = new Passepartout(ScreenValues.SCREEN_WIDTH, ScreenValues.SCREEN_HEIGHT, maximizeViewPortWidth,
 				maximizeViewPortHeight, virtualWidth, virtualHeight);
@@ -247,14 +248,17 @@ public class StageListener implements ApplicationListener {
 			makeAutomaticScreenshot = project.manualScreenshotExists(SCREENSHOT_MANUAL_FILE_NAME) || scene
 					.screenshotExists(SCREENSHOT_AUTOMATIC_FILE_NAME) || scene.screenshotExists(SCREENSHOT_MANUAL_FILE_NAME);
 		}
+		if (drawDebugCollisionPolygons) {
+			collisionPolygonDebugRenderer.setProjectionMatrix(camera.combined);
+			collisionPolygonDebugRenderer.setAutoShapeType(true);
+			collisionPolygonDebugRenderer.setColor(Color.MAGENTA);
+		}
 	}
 
 	public void cloneSpriteAndAddToStage(Sprite cloneMe) {
 		Sprite copy = cloneMe.cloneForCloneBrick();
-		copy.resetSprite();
 		copy.look.createBrightnessContrastHueShader();
 		stage.addActor(copy.look);
-		copy.resume();
 		sprites.add(copy);
 		clonedSprites.add(copy);
 
@@ -279,7 +283,6 @@ public class StageListener implements ApplicationListener {
 
 		BroadcastHandler.getScriptSpriteMap().remove(sprite);
 
-		sprite.pause();
 		sprite.look.setLookVisible(false);
 		sprite.look.remove();
 		sprites.remove(sprite);
@@ -289,11 +292,6 @@ public class StageListener implements ApplicationListener {
 	private void disposeClonedSprites() {
 		for (Scene scene : ProjectManager.getInstance().getCurrentProject().getSceneList()) {
 			scene.removeAllClones();
-		}
-		if (drawDebugCollisionPolygons) {
-			collisionPolygonDebugRenderer.setProjectionMatrix(camera.combined);
-			collisionPolygonDebugRenderer.setAutoShapeType(true);
-			collisionPolygonDebugRenderer.setColor(Color.MAGENTA);
 		}
 	}
 
@@ -329,9 +327,6 @@ public class StageListener implements ApplicationListener {
 		paused = false;
 		FaceDetectionHandler.resumeFaceDetection();
 		SoundManager.getInstance().resume();
-		for (Sprite sprite : sprites) {
-			sprite.resume();
-		}
 	}
 
 	void menuPause() {
@@ -342,9 +337,6 @@ public class StageListener implements ApplicationListener {
 		try {
 			paused = true;
 			SoundManager.getInstance().pause();
-			for (Sprite sprite : sprites) {
-				sprite.pause();
-			}
 		} catch (Exception exception) {
 			Log.e(TAG, "Pausing menu failed!", exception);
 		}
@@ -391,8 +383,8 @@ public class StageListener implements ApplicationListener {
 			return;
 		}
 		this.stageDialog = stageDialog;
-		if (!project.getDefaultScene().getName().equals(scene.getName())) {
-			transitionToScene(ProjectManager.getInstance().getCurrentProject().getDefaultScene().getName());
+		if (!ProjectManager.getInstance().getStartScene().getName().equals(scene.getName())) {
+			transitionToScene(ProjectManager.getInstance().getStartScene().getName());
 		}
 		stageBackupMap.clear();
 
@@ -414,9 +406,6 @@ public class StageListener implements ApplicationListener {
 		if (!paused) {
 			FaceDetectionHandler.resumeFaceDetection();
 			SoundManager.getInstance().resume();
-			for (Sprite sprite : sprites) {
-				sprite.resume();
-			}
 		}
 
 		for (Sprite sprite : sprites) {
@@ -432,9 +421,6 @@ public class StageListener implements ApplicationListener {
 		if (!paused) {
 			FaceDetectionHandler.pauseFaceDetection();
 			SoundManager.getInstance().pause();
-			for (Sprite sprite : sprites) {
-				sprite.pause();
-			}
 		}
 	}
 
@@ -458,9 +444,6 @@ public class StageListener implements ApplicationListener {
 		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		if (reloadProject) {
 			int spriteSize = sprites.size();
-			for (int i = 0; i < spriteSize; i++) {
-				sprites.get(i).pause();
-			}
 			stage.clear();
 			SoundManager.getInstance().clear();
 
@@ -480,7 +463,6 @@ public class StageListener implements ApplicationListener {
 					stage.addActor(penActor);
 					addPenActor = false;
 				}
-				sprite.pause();
 			}
 			stage.addActor(passepartout);
 			initStageInputListener();
@@ -555,6 +537,7 @@ public class StageListener implements ApplicationListener {
 
 		if (!finished) {
 			stage.draw();
+			firstFrameDrawn = true;
 		}
 
 		if (makeAutomaticScreenshot) {
@@ -957,25 +940,49 @@ public class StageListener implements ApplicationListener {
 	}
 
 	public void drawDebugCollisionPolygons() {
-		collisionPolygonDebugRenderer.setAutoShapeType(true);
-		collisionPolygonDebugRenderer.begin();
+		boolean drawPolygons = true;
+		boolean drawBoundingBoxes = false;
+		boolean drawPolygonPoints = false;
+		boolean drawTouchingAreas = true;
+
+		Color colorPolygons = Color.MAGENTA;
+		Color colorBoundingBoxes = Color.MAROON;
+		Color colorPolygonPoints = Color.BLACK;
+		Color colorTouchingAreas = Color.RED;
+
 		int lineWidth = 5;
 		Gdx.gl20.glLineWidth(lineWidth / camera.zoom);
+
+		collisionPolygonDebugRenderer.setAutoShapeType(true);
+		collisionPolygonDebugRenderer.begin();
+
 		for (Sprite sprite : sprites.subList(1, sprites.size())) {
-
 			Polygon[] polygonsForSprite = sprite.look.getCurrentCollisionPolygon();
-
 			if (polygonsForSprite != null) {
 				for (Polygon polygonToDraw : polygonsForSprite) {
-					collisionPolygonDebugRenderer.polygon(polygonToDraw.getTransformedVertices());
-					Rectangle r = polygonToDraw.getBoundingRectangle();
-
-					collisionPolygonDebugRenderer.rect(r.getX(), r.getY(), r.getWidth(), r.getHeight(), Color.CYAN, Color
-							.CYAN, Color.CYAN, Color.CYAN);
-
-					float[] points = polygonToDraw.getTransformedVertices();
-					for (int i = 0; i < points.length; i += 2) {
-						collisionPolygonDebugRenderer.circle(points[i], points[i + 1], 10);
+					if (drawPolygons) {
+						collisionPolygonDebugRenderer.setColor(colorPolygons);
+						collisionPolygonDebugRenderer.polygon(polygonToDraw.getTransformedVertices());
+					}
+					if (drawBoundingBoxes) {
+						Rectangle r = polygonToDraw.getBoundingRectangle();
+						collisionPolygonDebugRenderer.setColor(colorBoundingBoxes);
+						collisionPolygonDebugRenderer.rect(r.getX(), r.getY(), r.getWidth(), r.getHeight(), Color.CYAN, Color
+								.CYAN, Color.CYAN, Color.CYAN);
+					}
+					if (drawPolygonPoints) {
+						collisionPolygonDebugRenderer.setColor(colorPolygonPoints);
+						float[] points = polygonToDraw.getTransformedVertices();
+						for (int i = 0; i < points.length; i += 2) {
+							collisionPolygonDebugRenderer.circle(points[i], points[i + 1], 10);
+						}
+					}
+				}
+				if (drawTouchingAreas) {
+					ArrayList<PointF> touchingPoints = TouchUtil.getCurrentTouchingPoints();
+					collisionPolygonDebugRenderer.setColor(colorTouchingAreas);
+					for (PointF point : touchingPoints) {
+						collisionPolygonDebugRenderer.circle(point.x, point.y, Constants.COLLISION_WITH_FINGER_TOUCH_RADIUS);
 					}
 				}
 			}

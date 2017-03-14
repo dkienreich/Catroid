@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -131,7 +131,7 @@ public class SetLookBrick extends BrickBaseType implements OnLookDataListChanged
 		setSpinnerSelection(lookBrickSpinner);
 
 		if (getSprite().getName().equals(context.getString(R.string.background))) {
-			TextView textField = (TextView) view.findViewById(R.id.brick_set_look_and_wait);
+			TextView textField = (TextView) view.findViewById(R.id.brick_set_look_prototype_text_view);
 			textField.setText(R.string.brick_set_background);
 		}
 
@@ -158,7 +158,7 @@ public class SetLookBrick extends BrickBaseType implements OnLookDataListChanged
 	public View getPrototypeView(Context context) {
 		prototypeView = View.inflate(context, R.layout.brick_set_look, null);
 		if (getSprite().getName().equals(context.getString(R.string.background))) {
-			TextView textField = (TextView) prototypeView.findViewById(R.id.brick_set_look_and_wait);
+			TextView textField = (TextView) prototypeView.findViewById(R.id.brick_set_look_prototype_text_view);
 			textField.setText(R.string.brick_set_background);
 		}
 

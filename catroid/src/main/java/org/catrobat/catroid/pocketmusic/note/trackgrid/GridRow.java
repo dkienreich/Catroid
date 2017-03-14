@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -53,7 +53,7 @@ public class GridRow {
 		hashCode = primeWithGoodCollisionPrevention * hashCode + noteName.hashCode();
 
 		for (int i = 0; i < getGridRowPositions().size(); i++) {
-			hashCode = primeWithGoodCollisionPrevention * hashCode + getGridRowPositions().valueAt(i).hashCode();
+			hashCode = hashCode + primeWithGoodCollisionPrevention * getGridRowPositions().valueAt(i).hashCode();
 		}
 
 		return hashCode;
@@ -65,6 +65,10 @@ public class GridRow {
 			return false;
 		}
 		GridRow reference = (GridRow) o;
+
+		if (!reference.noteName.equals(noteName)) {
+			return false;
+		}
 
 		if (reference.getGridRowPositions().size() != getGridRowPositions().size()) {
 			return false;
@@ -83,6 +87,6 @@ public class GridRow {
 				return false;
 			}
 		}
-		return reference.noteName.equals(noteName);
+		return true;
 	}
 }

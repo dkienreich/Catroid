@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -53,7 +53,7 @@ import org.catrobat.catroid.formulaeditor.DataContainer;
 import org.catrobat.catroid.formulaeditor.Formula;
 import org.catrobat.catroid.formulaeditor.UserVariable;
 import org.catrobat.catroid.ui.BrickLayout;
-import org.catrobat.catroid.ui.dragndrop.DragAndDropListView;
+import org.catrobat.catroid.ui.dragndrop.BrickDragAndDropListView;
 import org.catrobat.catroid.ui.fragment.UserBrickElementEditorFragment;
 import org.catrobat.catroid.utils.Utils;
 
@@ -248,7 +248,7 @@ public class UserScriptDefinitionBrick extends BrickBaseType implements ScriptBr
 
 		view.measure(MeasureSpec.makeMeasureSpec(ScreenValues.SCREEN_WIDTH, MeasureSpec.EXACTLY), MeasureSpec
 				.makeMeasureSpec(
-						Utils.getPhysicalPixels(DragAndDropListView.WIDTH_OF_BRICK_PREVIEW_IMAGE, view.getContext()),
+						Utils.getPhysicalPixels(BrickDragAndDropListView.WIDTH_OF_BRICK_PREVIEW_IMAGE, view.getContext()),
 						MeasureSpec.AT_MOST));
 		view.layout(0, 0, ScreenValues.SCREEN_WIDTH, view.getMeasuredHeight());
 

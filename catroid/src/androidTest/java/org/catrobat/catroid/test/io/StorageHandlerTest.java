@@ -1,6 +1,6 @@
 /*
  * Catroid: An on-device visual programming system for Android devices
- * Copyright (C) 2010-2016 The Catrobat Team
+ * Copyright (C) 2010-2017 The Catrobat Team
  * (<http://developer.catrobat.org/credits>)
  *
  * This program is free software: you can redistribute it and/or modify
@@ -136,7 +136,6 @@ public class StorageHandlerTest extends InstrumentationTestCase {
 		testScript.addBrick(comeToFrontBrick);
 
 		otherScript.addBrick(placeAtBrick);
-		otherScript.setPaused(true);
 
 		firstSprite.addScript(testScript);
 		secondSprite.addScript(otherScript);
@@ -189,8 +188,6 @@ public class StorageHandlerTest extends InstrumentationTestCase {
 		assertEquals("YPosition was not deserialized right", yPosition,
 				interpretFormula(actualYPosition, null).intValue());
 
-		assertFalse("paused should not be set in script", preSpriteList.get(1).getScript(0).isPaused());
-
 		// Test version codes and names
 		//		final int preVersionCode = (Integer) TestUtils.getPrivateField("catroidVersionCode", project, false);
 		//		final int postVersionCode = (Integer) TestUtils.getPrivateField("catroidVersionCode", loadedProject, false);
@@ -225,7 +222,6 @@ public class StorageHandlerTest extends InstrumentationTestCase {
 		testScript.addBrick(comeToFrontBrick);
 
 		otherScript.addBrick(placeAtBrick);
-		otherScript.setPaused(true);
 
 		firstSprite.addScript(testScript);
 		secondSprite.addScript(otherScript);
