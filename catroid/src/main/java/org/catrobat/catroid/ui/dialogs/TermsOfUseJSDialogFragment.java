@@ -107,7 +107,7 @@ public class TermsOfUseJSDialogFragment extends DialogFragment {
 			checkboxTermsOfUseAcceptedPermanently.setVisibility(CheckBox.VISIBLE);
 			checkboxTermsOfUseAcceptedPermanently.setText(R.string.dialog_terms_of_use_parrot_reminder_do_not_remind_again);
 			termsOfUseDialogBuilder.setCancelable(false);
-			termsOfUseTextView.setText(R.string.dialog_terms_of_use_parrot_reminder_text);
+			termsOfUseTextView.setText(R.string.dialog_terms_of_use_jumpingsumo_reminder_text);
 			termsOfUseUrlStringText = getString(R.string.dialog_terms_of_use_link_text_parrot_reminder);
 		} else {
 			termsOfUseTextView.setText(R.string.dialog_terms_of_use_info);

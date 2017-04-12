@@ -149,7 +149,7 @@ public class JumpingSumoSoundBrick extends FormulaBrick {
 			}
 		});
 
-		TextView textVolume = (TextView) view.findViewById(R.id.brick_jumping_sumo_sound_edit_text);
+		TextView textVolume = (TextView) view.findViewById(R.id.brick_jumping_sumo_sound_text_view);
 		editVolume = (TextView) view.findViewById(R.id.brick_jumping_sumo_sound_edit_text);
 		getFormulaWithBrickField(BrickField.JUMPING_SUMO_VOLUME).setTextFieldId(R.id.brick_jumping_sumo_sound_edit_text);
 		getFormulaWithBrickField(BrickField.JUMPING_SUMO_VOLUME).refreshTextField(view);

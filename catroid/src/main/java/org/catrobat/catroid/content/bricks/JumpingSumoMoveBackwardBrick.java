@@ -22,7 +22,11 @@
  */
 package org.catrobat.catroid.content.bricks;
 
+import android.content.Context;
 import android.view.View;
+import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
@@ -60,5 +64,47 @@ public class JumpingSumoMoveBackwardBrick extends JumpingSumoMoveBrick {
 
 	@Override
 	public void updateReferenceAfterMerge(Scene into, Scene from) {
+	}
+
+	@Override
+	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
+		if (animationState) {
+			return view;
+		}
+
+		view = View.inflate(context, R.layout.brick_jumping_sumo_move, null);
+
+		setCheckboxView(R.id.brick_jumping_sumo_move_checkbox);
+
+		final Brick brickInstance = this;
+		checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				adapter.handleCheck(brickInstance, isChecked);
+			}
+		});
+
+		TextView editTime = (TextView) view.findViewById(R.id.brick_jumping_sumo_move_edit_text_second);
+		getFormulaWithBrickField(BrickField.JUMPING_SUMO_TIME_TO_DRIVE_IN_SECONDS)
+				.setTextFieldId(R.id.brick_jumping_sumo_move_edit_text_second);
+		getFormulaWithBrickField(BrickField.JUMPING_SUMO_TIME_TO_DRIVE_IN_SECONDS).refreshTextField(view);
+
+		TextView label = (TextView) view.findViewById(R.id.brick_jumping_sumo_move_label);
+		label.setText(getBrickLabel(view));
+
+		editTime.setVisibility(View.VISIBLE);
+		editTime.setOnClickListener(this);
+
+		TextView editPower = (TextView) view.findViewById(R.id.brick_jumping_sumo_move_edit_text_power);
+		getFormulaWithBrickField(BrickField.JUMPING_SUMO_SPEED)
+				.setTextFieldId(R.id.brick_jumping_sumo_move_edit_text_power);
+		getFormulaWithBrickField(BrickField.JUMPING_SUMO_SPEED).refreshTextField(view);
+		TextView textPower = (TextView) view.findViewById(R.id.brick_jumping_sumo_move_text_view_power);
+
+		textPower.setVisibility(View.VISIBLE);
+		editPower.setVisibility(View.VISIBLE);
+		editPower.setOnClickListener(this);
+
+		return view;
 	}
 }

@@ -268,6 +268,12 @@
     <string name="dialog_terms_of_use_parrot_reminder_do_not_remind_again">Do not remind me again.</string>
     <!--  -->
 
+    <!-- Terms of Use Dialog Parrot Jumping Sumo-->
+    <string name="dialog_terms_of_use_jumpingsumo_reminder_text">You attempt to use Pocket Code together with Parrot\'s
+        Jumping Sumo. We strongly remind you to abide to Parrot\'s terms of use for the drone and to Catrobat\'s terms of
+        use for Pocket Code.</string>
+    <!--  -->
+
     <!-- About Dialog -->
     <string name="dialog_about_title">About Pocket Code</string>
     <string name="dialog_about_license_info">Pocket Code is a programming
@@ -1156,7 +1162,7 @@
     <string name="brick_drone_set_vertical_speed">Vertical speed limit</string>
     <string name="brick_drone_set_rotation_speed">Rotation speed limit</string>
     <string name="brick_drone_set_tilt_limit">Tilt limit</string>
-    <string name="brick_drone_with">with</string>
+    <string name="brick_drone_with">seconds with</string>
     <string name="brick_drone_percent_power">power</string>
     <!--  -->
 

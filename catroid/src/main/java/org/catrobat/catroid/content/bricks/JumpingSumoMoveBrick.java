@@ -23,23 +23,16 @@
 package org.catrobat.catroid.content.bricks;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
-import android.widget.BaseAdapter;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
-import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.BrickValues;
 import org.catrobat.catroid.content.Sprite;
 import org.catrobat.catroid.formulaeditor.Formula;
-import org.catrobat.catroid.formulaeditor.InterpretationException;
 import org.catrobat.catroid.ui.fragment.FormulaEditorFragment;
-import org.catrobat.catroid.utils.Utils;
 
 import java.util.List;
 
@@ -81,78 +74,16 @@ public abstract class JumpingSumoMoveBrick extends FormulaBrick {
 	public abstract List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence);
 
 	@Override
-	public View getView(Context context, int brickId, BaseAdapter baseAdapter) {
-		if (animationState) {
-			return view;
-		}
-
-		view = View.inflate(context, R.layout.brick_jumping_sumo_move, null);
-
-		setCheckboxView(R.id.brick_jumping_sumo_move_checkbox);
-
-		final Brick brickInstance = this;
-		checkbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				adapter.handleCheck(brickInstance, isChecked);
-			}
-		});
-
-		TextView editTime = (TextView) view.findViewById(R.id.brick_jumping_sumo_move_edit_text_second);
-		getFormulaWithBrickField(BrickField.JUMPING_SUMO_TIME_TO_DRIVE_IN_SECONDS)
-				.setTextFieldId(R.id.brick_jumping_sumo_move_edit_text_second);
-		getFormulaWithBrickField(BrickField.JUMPING_SUMO_TIME_TO_DRIVE_IN_SECONDS).refreshTextField(view);
-
-		TextView times = (TextView) view.findViewById(R.id.brick_jumping_sumo_move_text_view_second);
-
-		if (getFormulaWithBrickField(BrickField.JUMPING_SUMO_TIME_TO_DRIVE_IN_SECONDS).isSingleNumberFormula()) {
-			try {
-				times.setText(view.getResources().getQuantityString(R.plurals.second_plural,
-						Utils.convertDoubleToPluralInteger(getFormulaWithBrickField(BrickField.JUMPING_SUMO_TIME_TO_DRIVE_IN_SECONDS)
-								.interpretDouble(ProjectManager.getInstance().getCurrentSprite()))));
-			} catch (InterpretationException interpretationException) {
-				Log.d(TAG, "Formula interpretation for this specific Brick failed.", interpretationException);
-			}
-		} else {
-			// Random Number to get into the "other" keyword for values like 0.99 or 2.001 seconds or degrees
-			// in hopefully all possible languages
-			times.setText(view.getResources().getQuantityString(R.plurals.second_plural,
-					Utils.TRANSLATION_PLURAL_OTHER_INTEGER));
-		}
-
-		TextView label = (TextView) view.findViewById(R.id.brick_jumping_sumo_move_label);
-		label.setText(getBrickLabel(view));
-
-		editTime.setVisibility(View.VISIBLE);
-		editTime.setOnClickListener(this);
-
-		TextView editPower = (TextView) view.findViewById(R.id.brick_jumping_sumo_move_edit_text_power);
-		getFormulaWithBrickField(BrickField.JUMPING_SUMO_SPEED)
-				.setTextFieldId(R.id.brick_jumping_sumo_move_edit_text_power);
-		getFormulaWithBrickField(BrickField.JUMPING_SUMO_SPEED).refreshTextField(view);
-		TextView textPower = (TextView) view.findViewById(R.id.brick_jumping_sumo_move_text_view_power);
-
-		textPower.setVisibility(View.VISIBLE);
-		editPower.setVisibility(View.VISIBLE);
-		editPower.setOnClickListener(this);
-
-		return view;
-	}
-
-	@Override
 	public View getPrototypeView(Context context) {
 		prototypeView = View.inflate(context, R.layout.brick_jumping_sumo_move, null);
 		TextView label = (TextView) prototypeView.findViewById(R.id.brick_jumping_sumo_move_label);
 		label.setText(getBrickLabel(prototypeView));
 		TextView textTime = (TextView) prototypeView.findViewById(R.id.brick_jumping_sumo_move_edit_text_second);
 
-		TextView times = (TextView) prototypeView.findViewById(R.id.brick_jumping_sumo_move_text_view_second);
 		TextView textPower = (TextView) prototypeView.findViewById(R.id.brick_jumping_sumo_move_edit_text_power);
 		textTime.setText(String.valueOf(BrickValues.JUMPING_SUMO_MOVE_BRICK_DEFAULT_TIME_MILLISECONDS / 1000));
 
 		textPower.setText(String.valueOf(BrickValues.JUMPING_SUMO_MOVE_BRICK_DEFAULT_MOVE_POWER_PERCENT));
-		times.setText(context.getResources().getQuantityString(R.plurals.second_plural,
-				Utils.convertDoubleToPluralInteger(BrickValues.JUMPING_SUMO_MOVE_BRICK_DEFAULT_TIME_MILLISECONDS / 1000)));
 		return prototypeView;
 	}
 
