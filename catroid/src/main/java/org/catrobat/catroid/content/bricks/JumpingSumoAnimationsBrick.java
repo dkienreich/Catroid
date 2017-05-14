@@ -97,14 +97,12 @@ public class JumpingSumoAnimationsBrick extends BrickBaseType {
 		}
 
 		view = View.inflate(context, R.layout.brick_jumping_sumo_animations, null);
-		//view = getViewWithAlpha(alphaValue);
 		setCheckboxView(R.id.brick_jumping_sumo_animation_checkbox);
 
 		final Brick brickInstance = this;
 		checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				//checked = isChecked;
 				adapter.handleCheck(brickInstance, isChecked);
 			}
 		});
@@ -141,27 +139,7 @@ public class JumpingSumoAnimationsBrick extends BrickBaseType {
 
 		return view;
 	}
-	/*
-		@Override
-		public View getViewWithAlpha(int alphaValue) {
 
-			if (view != null) {
-				View layout = view.findViewById(R.id.brick_jumping_sumo_animation_layout);
-				Drawable background = layout.getBackground();
-				background.setAlpha(alphaValue);
-
-				TextView textJumpingSumoActionLabel = (TextView) view.findViewById(R.id.brick_jumping_sumo_animation_text_view);
-
-				textJumpingSumoActionLabel.setTextColor(textJumpingSumoActionLabel.getTextColors().withAlpha(alphaValue));
-
-				Spinner animationSpinner = (Spinner) view.findViewById(R.id.brick_jumping_sumo_animation_spinner);
-				animationSpinner.getBackground().setAlpha(alphaValue);
-
-				this.alphaValue = alphaValue;
-			}
-			return view;
-		}
-	*/
 	@Override
 	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
 		sequence.addAction(sprite.getActionFactory().createJumpingSumoAnimationAction(sprite, animationenum));

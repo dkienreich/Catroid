@@ -40,14 +40,49 @@ public class JumpingSumoSoundAction extends TemporalAction {
 	private Sprite sprite;
 	private Formula volumeInPercent;
 	private JumpingSumoSoundBrick.Sounds soundEnum;
-	private byte normalizedVolume;
-
-	private static final int MIN_VOLUME = 0;
-	private static final byte MAX_VOLUME = 100;
 
 	private ARDeviceController deviceController;
 	private JumpingSumoDeviceController controller;
 	private static final String TAG = JumpingSumoMoveBackwardAction.class.getSimpleName();
+
+	@Override
+	protected void update(float percent) {
+		int normVolume;
+		controller = JumpingSumoDeviceController.getInstance();
+		deviceController = controller.getDeviceController();
+
+		try {
+			normVolume = volumeInPercent.interpretInteger(sprite);
+
+		} catch (InterpretationException interpretationException) {
+			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+			normVolume = 0;
+		}
+
+		if (deviceController != null) {
+
+			switch (soundEnum) {
+				case DEFAULT:
+					deviceController.getFeatureJumpingSumo().sendAudioSettingsMasterVolume((byte) normVolume);
+					deviceController.getFeatureJumpingSumo().sendAudioSettingsTheme(ARCOMMANDS_JUMPINGSUMO_AUDIOSETTINGS_THEME_THEME_ENUM.ARCOMMANDS_JUMPINGSUMO_AUDIOSETTINGS_THEME_THEME_DEFAULT);
+					break;
+				case ROBOT:
+					deviceController.getFeatureJumpingSumo().sendAudioSettingsMasterVolume((byte) normVolume);
+					deviceController.getFeatureJumpingSumo().sendAudioSettingsTheme(ARCOMMANDS_JUMPINGSUMO_AUDIOSETTINGS_THEME_THEME_ENUM.ARCOMMANDS_JUMPINGSUMO_AUDIOSETTINGS_THEME_THEME_ROBOT);
+					break;
+				case INSECT:
+					deviceController.getFeatureJumpingSumo().sendAudioSettingsMasterVolume((byte) normVolume);
+					deviceController.getFeatureJumpingSumo().sendAudioSettingsTheme(ARCOMMANDS_JUMPINGSUMO_AUDIOSETTINGS_THEME_THEME_ENUM.ARCOMMANDS_JUMPINGSUMO_AUDIOSETTINGS_THEME_THEME_INSECT);
+					break;
+				case MONSTER:
+					deviceController.getFeatureJumpingSumo().sendAudioSettingsMasterVolume((byte) normVolume);
+					deviceController.getFeatureJumpingSumo().sendAudioSettingsTheme(ARCOMMANDS_JUMPINGSUMO_AUDIOSETTINGS_THEME_THEME_ENUM.ARCOMMANDS_JUMPINGSUMO_AUDIOSETTINGS_THEME_THEME_MONSTER);
+					break;
+			}
+		} else {
+			Log.d(TAG, "error: send -stop command JS");
+		}
+	}
 
 	public void setSprite(Sprite sprite) {
 		this.sprite = sprite;
@@ -59,74 +94,5 @@ public class JumpingSumoSoundAction extends TemporalAction {
 
 	public void setSoundEnum(JumpingSumoSoundBrick.Sounds soundEnum) {
 		this.soundEnum = soundEnum;
-	}
-
-	@Override
-	protected void begin() {
-		super.begin();
-		controller = JumpingSumoDeviceController.getInstance();
-		deviceController = controller.getDeviceController();
-
-		/*int volumeValue;
-		try {
-			volumeValue = volumeInPercent.interpretInteger(sprite);
-			normalizedVolume = (byte) -volumeValue;
-		} catch (InterpretationException interpretationException) {
-			volumeValue = 0;
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-		}*/
-
-		try {
-			int normVolume = volumeInPercent.interpretInteger(sprite);
-			normalizedVolume = (byte) -normVolume;
-			//volumeValue = volumeInPercent.interpretInteger(sprite);
-
-		} catch (InterpretationException interpretationException) {
-			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
-			normalizedVolume = MIN_VOLUME;
-		}
-
-/*
-		if (volumeValue < MIN_VOLUME) {
-			volumeValue = MIN_VOLUME;
-			normalizedVolume = (byte) -volumeValue;
-		} else if (volumeValue > MAX_VOLUME) {
-			volumeValue = MAX_VOLUME;
-			normalizedVolume = (byte) -volumeValue;
-		}
-*/
-		start();
-	}
-
-	protected void start() {
-
-		if (deviceController != null) {
-
-			switch (soundEnum) {
-				case DEFAULT:
-					deviceController.getFeatureJumpingSumo().sendAudioSettingsMasterVolume(normalizedVolume);
-					deviceController.getFeatureJumpingSumo().sendAudioSettingsTheme(ARCOMMANDS_JUMPINGSUMO_AUDIOSETTINGS_THEME_THEME_ENUM.ARCOMMANDS_JUMPINGSUMO_AUDIOSETTINGS_THEME_THEME_DEFAULT);
-					break;
-				case ROBOT:
-					deviceController.getFeatureJumpingSumo().sendAudioSettingsMasterVolume(normalizedVolume);
-					deviceController.getFeatureJumpingSumo().sendAudioSettingsTheme(ARCOMMANDS_JUMPINGSUMO_AUDIOSETTINGS_THEME_THEME_ENUM.ARCOMMANDS_JUMPINGSUMO_AUDIOSETTINGS_THEME_THEME_ROBOT);
-					break;
-				case INSECT:
-					deviceController.getFeatureJumpingSumo().sendAudioSettingsMasterVolume(normalizedVolume);
-					deviceController.getFeatureJumpingSumo().sendAudioSettingsTheme(ARCOMMANDS_JUMPINGSUMO_AUDIOSETTINGS_THEME_THEME_ENUM.ARCOMMANDS_JUMPINGSUMO_AUDIOSETTINGS_THEME_THEME_INSECT);
-					break;
-				case MONSTER:
-					deviceController.getFeatureJumpingSumo().sendAudioSettingsMasterVolume(normalizedVolume);
-					deviceController.getFeatureJumpingSumo().sendAudioSettingsTheme(ARCOMMANDS_JUMPINGSUMO_AUDIOSETTINGS_THEME_THEME_ENUM.ARCOMMANDS_JUMPINGSUMO_AUDIOSETTINGS_THEME_THEME_MONSTER);
-					break;
-			}
-		} else {
-			Log.d(TAG, "error: send -stop command JS");
-		}
-	}
-
-	@Override
-	protected void update(float percent) {
-		//Nothing to do
 	}
 }

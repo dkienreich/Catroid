@@ -46,7 +46,6 @@ import android.widget.EditText;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.parrot.arsdk.arcontroller.ARDeviceController;
 
 import org.catrobat.catroid.BuildConfig;
 import org.catrobat.catroid.ProjectManager;
@@ -102,7 +101,6 @@ public class StageActivity extends AndroidApplication {
 
 	public static Handler messageHandler;
 	private JumpingSumoDeviceController controller;
-	private ARDeviceController deviceController;
 	public static Map<Integer, IntentListener> intentListeners = new HashMap<>();
 	public static Random randomGenerator = new Random();
 
@@ -250,12 +248,6 @@ public class StageActivity extends AndroidApplication {
 		stageListener.finish();
 
 		PreStageActivity.shutdownResources();
-	}
-
-	public static boolean checkJumpingSumoAvailability() {
-		int requiredResources = ProjectManager.getInstance().getCurrentProject().getRequiredResources();
-		boolean isJSAvailable = (((requiredResources & Brick.JUMPING_SUMO) > 0) && BuildConfig.FEATURE_PARROT_JUMPING_SUMO_ENABLED);
-		return isJSAvailable;
 	}
 
 	@Override

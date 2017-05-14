@@ -48,12 +48,4 @@ public final class JumpingSumoDataContainer {
 	public boolean getPostion() {
 		return positionHeadUp;
 	}
-
-	public Object getBatteryStatus() {
-		return batteryVariable.getValue();
-	}
-
-	public UserVariable getBatteryVariable() {
-		return batteryVariable;
-	}
 }

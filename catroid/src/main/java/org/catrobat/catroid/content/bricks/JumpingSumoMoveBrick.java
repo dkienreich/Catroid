@@ -42,18 +42,18 @@ public abstract class JumpingSumoMoveBrick extends FormulaBrick {
 	protected transient View prototypeView;
 	private static final long serialVersionUID = 1L;
 
-	public JumpingSumoMoveBrick() {
+	/*public JumpingSumoMoveBrick() {
 		addAllowedBrickField(BrickField.JUMPING_SUMO_TIME_TO_DRIVE_IN_SECONDS);
 		addAllowedBrickField(BrickField.JUMPING_SUMO_SPEED);
-	}
+	}*/
 
 	public JumpingSumoMoveBrick(int durationInMilliseconds, int powerInPercent) {
 		initializeBrickFields(new Formula(durationInMilliseconds / 1000.0), new Formula(powerInPercent));
 	}
 
-	public JumpingSumoMoveBrick(Formula durationInSeconds, Formula powerInPercent) {
+	/*public JumpingSumoMoveBrick(Formula durationInSeconds, Formula powerInPercent) {
 		initializeBrickFields(durationInSeconds, powerInPercent);
-	}
+	}*/
 
 	private void initializeBrickFields(Formula durationInSeconds, Formula powerInPercent) {
 		addAllowedBrickField(BrickField.JUMPING_SUMO_TIME_TO_DRIVE_IN_SECONDS);

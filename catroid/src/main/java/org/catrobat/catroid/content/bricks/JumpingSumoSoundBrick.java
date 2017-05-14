@@ -205,42 +205,6 @@ public class JumpingSumoSoundBrick extends FormulaBrick {
 		return getFormulaWithBrickField(BrickField.JUMPING_SUMO_VOLUME).getRoot().getElementType()
 				== FormulaElement.ElementType.NUMBER;
 	}
-/*
-	@Override
-	public View getViewWithAlpha(int alphaValue) {
-
-		if (view != null) {
-
-			View layout = view.findViewById(R.id.brick_jumping_sumo_sound_layout);
-			Drawable background = layout.getBackground();
-			background.setAlpha(alphaValue);
-
-			TextView textJumpingSumoSoundLabel = (TextView) view.findViewById(R.id.brick_jumping_sumo_sound_label);
-			TextView textJumpingSumoSoundVolume = (TextView) view.findViewById(R.id.brick_jumping_sumo_sound_volume);
-			TextView textJumpingSumoSoundPercent = (TextView) view.findViewById(R.id.brick_jumping_sumo_sound_percent);
-			TextView textJumpingSumoSoundVolumeView = (TextView) view
-					.findViewById(R.id.brick_jumping_sumo_sound_text_view);
-			TextView editVolume = (TextView) view.findViewById(R.id.brick_jumping_sumo_sound_edit_text);
-
-			textJumpingSumoSoundLabel.setTextColor(textJumpingSumoSoundLabel.getTextColors().withAlpha(alphaValue));
-			textJumpingSumoSoundVolume.setTextColor(textJumpingSumoSoundVolume.getTextColors().withAlpha(alphaValue));
-			textJumpingSumoSoundPercent.setTextColor(textJumpingSumoSoundPercent.getTextColors().withAlpha(alphaValue));
-			textJumpingSumoSoundVolumeView.setTextColor(textJumpingSumoSoundVolumeView.getTextColors().withAlpha(
-					alphaValue));
-			Spinner soundSpinner = (Spinner) view.findViewById(R.id.brick_jumping_sumo_sound_spinner);
-			ColorStateList color = textJumpingSumoSoundVolumeView.getTextColors().withAlpha(alphaValue);
-			soundSpinner.getBackground().setAlpha(alphaValue);
-			if (adapterView != null) {
-				((TextView) adapterView.getChildAt(0)).setTextColor(color);
-			}
-			editVolume.setTextColor(editVolume.getTextColors().withAlpha(alphaValue));
-			editVolume.getBackground().setAlpha(alphaValue);
-
-			this.alphaValue = alphaValue;
-		}
-
-		return view;
-	}*/
 
 	@Override
 	public List<SequenceAction> addActionToSequence(Sprite sprite, SequenceAction sequence) {
