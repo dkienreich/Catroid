@@ -42,9 +42,6 @@ public class JumpingSumoTakingPictureAction extends TemporalAction {
 		super.begin();
 		controller = JumpingSumoDeviceController.getInstance();
 		deviceController = controller.getDeviceController();
-		super.begin();
-		controller = JumpingSumoDeviceController.getInstance();
-		deviceController = controller.getDeviceController();
 
 		if (deviceController != null) {
 			Log.d(TAG, "before picture was taken");

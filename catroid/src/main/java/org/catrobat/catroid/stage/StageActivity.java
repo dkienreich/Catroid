@@ -252,6 +252,12 @@ public class StageActivity extends AndroidApplication {
 		PreStageActivity.shutdownResources();
 	}
 
+	public static boolean checkJumpingSumoAvailability() {
+		int requiredResources = ProjectManager.getInstance().getCurrentProject().getRequiredResources();
+		boolean isJSAvailable = (((requiredResources & Brick.JUMPING_SUMO) > 0) && BuildConfig.FEATURE_PARROT_JUMPING_SUMO_ENABLED);
+		return isJSAvailable;
+	}
+
 	@Override
 	public void onPause() {
 		if (nfcAdapter != null) {

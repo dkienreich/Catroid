@@ -82,7 +82,6 @@ import org.catrobat.catroid.content.actions.HideTextAction;
 import org.catrobat.catroid.content.actions.IfLogicAction;
 import org.catrobat.catroid.content.actions.InsertItemIntoUserListAction;
 import org.catrobat.catroid.content.actions.JumpingSumoAnimationAction;
-import org.catrobat.catroid.content.actions.JumpingSumoDownloadAction;
 import org.catrobat.catroid.content.actions.JumpingSumoJumpHighAction;
 import org.catrobat.catroid.content.actions.JumpingSumoJumpLongAction;
 import org.catrobat.catroid.content.actions.JumpingSumoMoveBackwardAction;
@@ -90,7 +89,6 @@ import org.catrobat.catroid.content.actions.JumpingSumoMoveForwardAction;
 import org.catrobat.catroid.content.actions.JumpingSumoNoSoundAction;
 import org.catrobat.catroid.content.actions.JumpingSumoRotateLeftAction;
 import org.catrobat.catroid.content.actions.JumpingSumoRotateRightAction;
-import org.catrobat.catroid.content.actions.JumpingSumoShowBatteryStatusAction;
 import org.catrobat.catroid.content.actions.JumpingSumoSoundAction;
 import org.catrobat.catroid.content.actions.JumpingSumoTakingPictureAction;
 import org.catrobat.catroid.content.actions.JumpingSumoTurnAction;
@@ -980,10 +978,6 @@ public class ActionFactory extends Actions {
 		return action(JumpingSumoNoSoundAction.class);
 	}
 
-	public Action createJumpingSumoDownloadAction() {
-		return action(JumpingSumoDownloadAction.class);
-	}
-
 	public Action createJumpingSumoAnimationAction(Sprite sprite, JumpingSumoAnimationsBrick.Animation animationEnum) {
 		JumpingSumoAnimationAction action = action(JumpingSumoAnimationAction.class);
 		action.setAnimationEnum(animationEnum);
@@ -1034,18 +1028,6 @@ public class ActionFactory extends Actions {
 		JumpingSumoRotateRightAction action = action(JumpingSumoRotateRightAction.class);
 		action.setSprite(sprite);
 		action.setDegree(degree);
-		return action;
-	}
-
-	public Action createJumpingSumoShowBatteryStatusAction(Sprite sprite, Formula xPosition, Formula yPosition,
-			UserVariable
-			userVariable) {
-		JumpingSumoShowBatteryStatusAction action = action(JumpingSumoShowBatteryStatusAction.class);
-		action.setPosition(xPosition, yPosition);
-		action.setVariableToShow(userVariable);
-		action.setSprite(sprite);
-		UserBrick userBrick = ProjectManager.getInstance().getCurrentUserBrick();
-		action.setUserBrick(userBrick);
 		return action;
 	}
 

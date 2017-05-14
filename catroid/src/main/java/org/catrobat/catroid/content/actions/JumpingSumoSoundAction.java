@@ -43,7 +43,7 @@ public class JumpingSumoSoundAction extends TemporalAction {
 	private byte normalizedVolume;
 
 	private static final int MIN_VOLUME = 0;
-	private static final int MAX_VOLUME = 100;
+	private static final byte MAX_VOLUME = 100;
 
 	private ARDeviceController deviceController;
 	private JumpingSumoDeviceController controller;
@@ -67,15 +67,26 @@ public class JumpingSumoSoundAction extends TemporalAction {
 		controller = JumpingSumoDeviceController.getInstance();
 		deviceController = controller.getDeviceController();
 
-		int volumeValue;
+		/*int volumeValue;
 		try {
 			volumeValue = volumeInPercent.interpretInteger(sprite);
 			normalizedVolume = (byte) -volumeValue;
 		} catch (InterpretationException interpretationException) {
 			volumeValue = 0;
 			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+		}*/
+
+		try {
+			int normVolume = volumeInPercent.interpretInteger(sprite);
+			normalizedVolume = (byte) -normVolume;
+			//volumeValue = volumeInPercent.interpretInteger(sprite);
+
+		} catch (InterpretationException interpretationException) {
+			Log.d(getClass().getSimpleName(), "Formula interpretation for this specific Brick failed.", interpretationException);
+			normalizedVolume = MIN_VOLUME;
 		}
 
+/*
 		if (volumeValue < MIN_VOLUME) {
 			volumeValue = MIN_VOLUME;
 			normalizedVolume = (byte) -volumeValue;
@@ -83,7 +94,7 @@ public class JumpingSumoSoundAction extends TemporalAction {
 			volumeValue = MAX_VOLUME;
 			normalizedVolume = (byte) -volumeValue;
 		}
-
+*/
 		start();
 	}
 

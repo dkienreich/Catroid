@@ -23,7 +23,6 @@
 package org.catrobat.catroid.drone.jumpingsumo;
 
 import org.catrobat.catroid.common.Constants;
-import org.catrobat.catroid.content.actions.JumpingSumoShowBatteryStatusAction;
 import org.catrobat.catroid.formulaeditor.UserVariable;
 
 public final class JumpingSumoDataContainer {
@@ -32,7 +31,6 @@ public final class JumpingSumoDataContainer {
 	private static JumpingSumoDataContainer ourInstance = new JumpingSumoDataContainer();
 
 	public static final String BATTERY_STATUS = "Battery_Status";
-	private JumpingSumoShowBatteryStatusAction batteryAction = null;
 	private boolean positionHeadUp = true;
 	private UserVariable batteryVariable = new UserVariable(BATTERY_STATUS, Constants.JUMPING_SUMO_BATTERY_STATUS);
 
@@ -43,23 +41,12 @@ public final class JumpingSumoDataContainer {
 	private JumpingSumoDataContainer() {
 	}
 
-	public void setBatteryAction(JumpingSumoShowBatteryStatusAction batAction) {
-		batteryAction = batAction;
-	}
-
 	public void setPostion(boolean pos) {
 		positionHeadUp = pos;
 	}
 
 	public boolean getPostion() {
 		return positionHeadUp;
-	}
-
-	public void setBatteryStatus(Object battery) {
-		batteryVariable.setValue(battery);
-		if (batteryAction != null) {
-			batteryAction.updateBatteryStatus();
-		}
 	}
 
 	public Object getBatteryStatus() {
