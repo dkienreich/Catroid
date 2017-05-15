@@ -92,7 +92,7 @@ public class StageActivity extends AndroidApplication {
 	private StageAudioFocus stageAudioFocus;
 	private PendingIntent pendingIntent;
 	private NfcAdapter nfcAdapter;
-	private static BlockingDeque<NdefMessage> ndefMessageBlockingDeque = new LinkedBlockingDeque<NdefMessage>();
+	private static BlockingDeque<NdefMessage> ndefMessageBlockingDeque = new LinkedBlockingDeque<>();
 	private StageDialog stageDialog;
 	private boolean resizePossible;
 	private boolean askDialogUnanswered = false;
@@ -234,6 +234,7 @@ public class StageActivity extends AndroidApplication {
 	@Override
 	public void onBackPressed() {
 		if (BuildConfig.FEATURE_APK_GENERATOR_ENABLED) {
+			PreStageActivity.shutdownPersistentResources();
 			Intent marketingIntent = new Intent(StageActivity.this, MarketingActivity.class);
 			startActivity(marketingIntent);
 			finish();
