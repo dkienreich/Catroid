@@ -30,6 +30,7 @@ import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.BrickValues;
 import org.catrobat.catroid.common.Constants;
+import org.catrobat.catroid.common.JumpingSumoVideoLookData;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Script;
@@ -56,6 +57,7 @@ public class DefaultProjectCreatorJumpingSumo extends DefaultProjectCreator {
 
 	private static final String TAG = DefaultProjectCreatorJumpingSumo.class.getSimpleName();
 	protected static double iconImageScaleFactor = 1.8;
+
 	public DefaultProjectCreatorJumpingSumo() {
 		standardProjectNameID = R.string.default_jumping_sumo_project_name;
 	}
@@ -95,8 +97,8 @@ public class DefaultProjectCreatorJumpingSumo extends DefaultProjectCreator {
 
 		Sprite sprite = spriteFactory.newInstance(SingleSprite.class.getSimpleName(), backgroundName);
 
-		//LookData backgroundLookData = new DroneVideoLookData();
-		LookData backgroundLookData = new LookData();
+		LookData backgroundLookData = new JumpingSumoVideoLookData();
+		//LookData backgroundLookData = new LookData();
 		backgroundLookData.setLookName(context.getString(R.string.add_look_jumping_sumo_video));
 		backgroundLookData.setLookFilename(backgroundFile.getName());
 		sprite.getLookDataList().add(backgroundLookData);

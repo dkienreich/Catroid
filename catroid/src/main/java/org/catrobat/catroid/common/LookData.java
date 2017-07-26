@@ -61,6 +61,7 @@ public class LookData implements Serializable, Cloneable {
 	private static final transient int THUMBNAIL_HEIGHT = 150;
 	protected transient Pixmap pixmap = null;
 	transient TextureRegion textureRegion = null;
+	transient Texture tex;
 
 	private transient CollisionInformation collisionInformation = null;
 	public transient boolean isBackpackLookData = false;

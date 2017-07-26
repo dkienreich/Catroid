@@ -22,12 +22,23 @@
  */
 package org.catrobat.catroid.drone.jumpingsumo;
 
+import android.graphics.Bitmap;
+import android.util.Log;
+
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
+import com.parrot.arsdk.arcontroller.ARFrame;
+
 public final class JumpingSumoDataContainer {
 
 	public static final String TAG = JumpingSumoDataContainer.class.getSimpleName();
 	private static JumpingSumoDataContainer ourInstance = new JumpingSumoDataContainer();
 
 	private boolean positionHeadUp = true;
+	private Pixmap mypixmap = null;
+	private Bitmap mybitmap = null;
+	private ARFrame myframe = null;
+
 
 	public static JumpingSumoDataContainer getInstance() {
 		return ourInstance;
@@ -42,5 +53,31 @@ public final class JumpingSumoDataContainer {
 
 	public boolean getPostion() {
 		return positionHeadUp;
+	}
+
+	public void setFrame(ARFrame frame) {
+		myframe = frame;
+		Log.d(TAG, "Pixmap: " + myframe.hashCode());
+	}
+
+	public ARFrame getFrame() {
+		return myframe;
+	}
+
+	public void setFramePixmap(Pixmap pix) {
+		mypixmap = pix;
+		Log.d(TAG, "Pixmap: " + mypixmap.hashCode());
+	}
+
+	public Pixmap getFramePixmap() {
+		return mypixmap;
+	}
+
+	public void setBitmap(Bitmap bmp) {
+		mybitmap = bmp;
+	}
+
+	public Bitmap getBitmap() {
+		return mybitmap;
 	}
 }

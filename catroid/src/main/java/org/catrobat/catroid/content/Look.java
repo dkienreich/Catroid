@@ -23,6 +23,7 @@
 package org.catrobat.catroid.content;
 
 import android.graphics.PointF;
+import android.util.Log;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -42,6 +43,7 @@ import com.badlogic.gdx.utils.Array;
 
 import org.catrobat.catroid.common.Constants;
 import org.catrobat.catroid.common.DroneVideoLookData;
+import org.catrobat.catroid.common.JumpingSumoVideoLookData;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.utils.TouchUtil;
 
@@ -186,6 +188,10 @@ public class Look extends Image {
 		}
 
 		if (lookData instanceof DroneVideoLookData) {
+			lookData.draw(batch, alpha);
+		}
+
+		if (lookData instanceof JumpingSumoVideoLookData && lookData != null) {
 			lookData.draw(batch, alpha);
 		}
 
