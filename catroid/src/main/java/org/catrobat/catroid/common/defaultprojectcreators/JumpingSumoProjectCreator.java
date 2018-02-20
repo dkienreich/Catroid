@@ -29,6 +29,7 @@ import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.R;
 import org.catrobat.catroid.common.BrickValues;
 import org.catrobat.catroid.common.Constants;
+import org.catrobat.catroid.common.JumpingSumoVideoLookData;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.content.Project;
 import org.catrobat.catroid.content.Script;
@@ -91,7 +92,7 @@ public class JumpingSumoProjectCreator extends ProjectCreator {
 
 		Sprite sprite = spriteFactory.newInstance(SingleSprite.class.getSimpleName(), backgroundName);
 
-		LookData backgroundLookData = new LookData();
+		LookData backgroundLookData = new JumpingSumoVideoLookData();
 		backgroundLookData.setName(context.getString(R.string.add_look_jumping_sumo_video));
 		backgroundLookData.setFile(backgroundFile);
 		sprite.getLookList().add(backgroundLookData);

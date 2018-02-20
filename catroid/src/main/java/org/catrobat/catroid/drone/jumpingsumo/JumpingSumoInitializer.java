@@ -351,6 +351,7 @@ public class JumpingSumoInitializer {
 
 		@Override
 		public ARCONTROLLER_ERROR_ENUM onFrameReceived(ARDeviceController deviceController, final ARFrame frame) {
+			Log.d(TAG, "Frame received at "+ frame.getTimestamp() + "   " + frame.hashCode());
 			return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
 		}
 

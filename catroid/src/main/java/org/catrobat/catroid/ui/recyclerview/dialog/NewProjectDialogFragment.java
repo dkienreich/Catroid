@@ -136,7 +136,7 @@ public class NewProjectDialogFragment extends DialogFragment {
 	private void createDroneProject(String name, boolean jumpingSumo) {
 		try {
 			ProjectManager.getInstance()
-					.initializeNewProject(name, getActivity(), false, true, false, false, jumpingSumo);
+					.initializeNewProject(name, getActivity(), false, !jumpingSumo, false, false, jumpingSumo);
 			Intent intent = new Intent(getActivity(), ProjectActivity.class);
 			getActivity().startActivity(intent);
 		} catch (IOException e) {
