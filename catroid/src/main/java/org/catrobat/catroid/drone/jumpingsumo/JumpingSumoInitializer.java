@@ -373,9 +373,7 @@ public class JumpingSumoInitializer {
 			Pixmap pixmap = new Pixmap(bitmap.getWidth(),  bitmap.getHeight(), Pixmap.Format.RGBA8888);
 			pixmap.getPixels().asIntBuffer().put(pixels);
 
-
-			JumpingSumoVideoLookData.framePixmap = pixmap;
-
+			JumpingSumoVideoLookData.videoPixmaps.add(pixmap);
 			return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
 		}
 

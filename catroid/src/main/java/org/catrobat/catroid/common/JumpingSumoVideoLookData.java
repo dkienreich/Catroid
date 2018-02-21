@@ -50,6 +50,7 @@ import org.catrobat.catroid.io.StorageHandler;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static com.badlogic.gdx.Gdx.gl;
 
@@ -69,8 +70,8 @@ public class JumpingSumoVideoLookData extends LookData {
 	private transient ImageView view;
 	public static transient boolean changedAsdf = true;
 	public static transient Pixmap framePixmap = null;
-	public static transient Texture texture = new Texture(ScreenValues.SCREEN_WIDTH, ScreenValues.SCREEN_HEIGHT,
-			Pixmap.Format.RGBA8888);
+	public static transient Texture texture;
+	public static transient ConcurrentLinkedQueue<Pixmap> videoPixmaps = new ConcurrentLinkedQueue<>();
 
 	@Override
 	public JumpingSumoVideoLookData clone() {
@@ -96,12 +97,12 @@ public class JumpingSumoVideoLookData extends LookData {
 	public Pixmap getPixmap() {
 
 		defaultVideoTextureSize = new int[] {50, 50};
-		if (pixmap != null && pixmap != framePixmap) {
+		/*if (pixmap != null && pixmap != framePixmap) {
 			pixmap.dispose();
 			pixmap = framePixmap;
-		}
+		}*/
 		if (pixmap == null) {
-			pixmap = new Pixmap(ScreenValues.SCREEN_HEIGHT, ScreenValues.SCREEN_WIDTH, Pixmap.Format.RGB888);
+			pixmap = new Pixmap(30, 30, Pixmap.Format.RGB888);
 			pixmap.setColor(Color.RED);
 			pixmap.fill();
 			pixmap.setBlending(Pixmap.Blending.None);
@@ -112,20 +113,40 @@ public class JumpingSumoVideoLookData extends LookData {
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-
-		/*if (firstStart) {
-			Pixmap pm = new Pixmap(ScreenValues.SCREEN_HEIGHT, ScreenValues.SCREEN_WIDTH, Pixmap.Format.RGBA8888);
-			pm.setColor(Color.BLUE);
-			pm.fill();
-			texture = new Texture(pm);
-			firstStart = false;
+		if (!firstStart) {
+			texture.dispose();
 		}
-		Gdx.gl20.glBindTexture(GL20.GL_TEXTURE_2D, texture.getTextureObjectHandle());
-		batch.draw(texture, 0, 0);*/
-		if (changedAsdf) {
-
-
+		firstStart = false;
+		/*asdf = new Pixmap(ScreenValues.SCREEN_WIDTH, ScreenValues.SCREEN_HEIGHT, Pixmap.Format.RGBA8888);
+		asdf.setColor(Color.BLUE);
+		asdf.fill();
+		texture = new Texture(asdf);
+		//texture.draw(asdf, 0, 0);
+		batch.draw(texture, -900, -500);*/
+		if (videoPixmaps.size() == 0) {
+			return;
 		}
+		while (videoPixmaps.size() > 1) {
+			videoPixmaps.poll().dispose();
+		}
+		Pixmap currentPixmap = videoPixmaps.peek();
+		texture = new Texture(currentPixmap);
+		Image image = new Image(texture);
+		image.draw(batch, parentAlpha);
+
+
+		/*
+		if (framePixmap != null && texture == null) {
+			JumpingSumoVideoLookData.texture = new Texture(framePixmap);
+		}
+		if (framePixmap != null && texture != null) {
+			Gdx.gl20.glBindTexture(GL20.GL_TEXTURE_2D, texture.getTextureObjectHandle());
+			texture.draw(framePixmap, 0, 0);
+			batch.draw(texture, 0, 0);
+
+		}*/
+
+
 		/*byte[] data = pixmapReceiver.getFrame().getByteData();
 		bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
 		view.setImageBitmap(bmp);*/

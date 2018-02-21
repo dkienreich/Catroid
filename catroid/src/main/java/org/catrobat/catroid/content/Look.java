@@ -41,6 +41,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import org.catrobat.catroid.common.ActionScheduler;
 import org.catrobat.catroid.common.DroneVideoLookData;
+import org.catrobat.catroid.common.JumpingSumoVideoLookData;
 import org.catrobat.catroid.common.LookData;
 import org.catrobat.catroid.content.actions.EventSequenceAction;
 import org.catrobat.catroid.content.eventids.EventId;
@@ -164,6 +165,10 @@ public class Look extends Image {
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
+		if (lookData instanceof JumpingSumoVideoLookData) {
+			lookData.draw(batch, alpha);
+			return;
+		}
 		checkImageChanged();
 		batch.setShader(shader);
 		if (alpha == 0.0f) {
