@@ -67,6 +67,10 @@ public class JumpingSumoVideoLookData extends LookData {
 	private transient ARFrame frame;
 	private transient Bitmap bmp;
 	private transient ImageView view;
+	public static transient boolean changedAsdf = true;
+	public static transient Pixmap framePixmap = null;
+	public static transient Texture texture = new Texture(ScreenValues.SCREEN_WIDTH, ScreenValues.SCREEN_HEIGHT,
+			Pixmap.Format.RGBA8888);
 
 	@Override
 	public JumpingSumoVideoLookData clone() {
@@ -90,14 +94,15 @@ public class JumpingSumoVideoLookData extends LookData {
 
 	@Override
 	public Pixmap getPixmap() {
-		// BUG: Height() should be 1280, but it is 1184, so we need an scaling factor of 1.081081
-		int virtualScreenHeight = (int) Math.round(1.081081 * ScreenValues.SCREEN_HEIGHT);
 
-		defaultVideoTextureSize = new int[] {virtualScreenHeight, ScreenValues.SCREEN_WIDTH};
-
+		defaultVideoTextureSize = new int[] {50, 50};
+		if (pixmap != null && pixmap != framePixmap) {
+			pixmap.dispose();
+			pixmap = framePixmap;
+		}
 		if (pixmap == null) {
-			pixmap = new Pixmap(virtualScreenHeight, ScreenValues.SCREEN_WIDTH, Pixmap.Format.RGB888);
-			pixmap.setColor(Color.BLUE);
+			pixmap = new Pixmap(ScreenValues.SCREEN_HEIGHT, ScreenValues.SCREEN_WIDTH, Pixmap.Format.RGB888);
+			pixmap.setColor(Color.RED);
 			pixmap.fill();
 			pixmap.setBlending(Pixmap.Blending.None);
 		}
@@ -107,6 +112,20 @@ public class JumpingSumoVideoLookData extends LookData {
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
+
+		/*if (firstStart) {
+			Pixmap pm = new Pixmap(ScreenValues.SCREEN_HEIGHT, ScreenValues.SCREEN_WIDTH, Pixmap.Format.RGBA8888);
+			pm.setColor(Color.BLUE);
+			pm.fill();
+			texture = new Texture(pm);
+			firstStart = false;
+		}
+		Gdx.gl20.glBindTexture(GL20.GL_TEXTURE_2D, texture.getTextureObjectHandle());
+		batch.draw(texture, 0, 0);*/
+		if (changedAsdf) {
+
+
+		}
 		/*byte[] data = pixmapReceiver.getFrame().getByteData();
 		bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
 		view.setImageBitmap(bmp);*/

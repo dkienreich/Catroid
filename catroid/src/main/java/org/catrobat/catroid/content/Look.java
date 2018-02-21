@@ -171,8 +171,7 @@ public class Look extends Image {
 		} else {
 			super.setVisible(true);
 		}
-
-		if (lookData instanceof DroneVideoLookData) {
+		if (lookData != null) {
 			lookData.draw(batch, alpha);
 		}
 
@@ -207,7 +206,7 @@ public class Look extends Image {
 			if (lookData == null) {
 				setBounds(getX() + getWidth() / 2f, getY() + getHeight() / 2f, 0f, 0f);
 				setDrawable(null);
-				imageChanged = false;
+				//imageChanged = false;
 				return;
 			}
 
@@ -234,7 +233,7 @@ public class Look extends Image {
 			setDrawable(drawable);
 
 			flipLookDataIfNeeded(getRotationMode());
-			imageChanged = false;
+			//imageChanged = false;
 		}
 	}
 

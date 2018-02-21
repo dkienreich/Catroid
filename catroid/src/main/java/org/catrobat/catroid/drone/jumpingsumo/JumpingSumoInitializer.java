@@ -25,6 +25,8 @@ package org.catrobat.catroid.drone.jumpingsumo;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
@@ -33,6 +35,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AlertDialog.Builder;
 import android.util.Log;
 
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.parrot.arsdk.arcontroller.ARCONTROLLER_DEVICE_STATE_ENUM;
 import com.parrot.arsdk.arcontroller.ARCONTROLLER_DICTIONARY_KEY_ENUM;
 import com.parrot.arsdk.arcontroller.ARCONTROLLER_ERROR_ENUM;
@@ -53,6 +57,8 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryException;
 
 import org.catrobat.catroid.CatroidApplication;
 import org.catrobat.catroid.R;
+import org.catrobat.catroid.common.JumpingSumoVideoLookData;
+import org.catrobat.catroid.common.ScreenValues;
 import org.catrobat.catroid.stage.PreStageActivity;
 import org.catrobat.catroid.stage.StageActivity;
 
@@ -225,6 +231,7 @@ public class JumpingSumoInitializer {
 
 			deviceController.addListener(deviceControllerListener);
 			deviceController.addStreamListener(streamListener);
+			deviceController.getFeatureJumpingSumo().sendMediaStreamingVideoEnable((byte) 1);
 		} catch (ARControllerException e) {
 			Log.e(TAG, "Exception", e);
 		}
@@ -352,6 +359,23 @@ public class JumpingSumoInitializer {
 		@Override
 		public ARCONTROLLER_ERROR_ENUM onFrameReceived(ARDeviceController deviceController, final ARFrame frame) {
 			Log.d(TAG, "Frame received at "+ frame.getTimestamp() + "   " + frame.hashCode());
+			byte[] data = frame.getByteData();
+			Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+
+			int[] pixels = new int[bitmap.getWidth() *  bitmap.getHeight()];
+
+			bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+			// Convert from ARGB to RGBA
+			for (int i = 0; i< pixels.length; i++) {
+				int pixel = pixels[i];
+				pixels[i] = (pixel << 8) | ((pixel >> 24) & 0xFF);
+			}
+			Pixmap pixmap = new Pixmap(bitmap.getWidth(),  bitmap.getHeight(), Pixmap.Format.RGBA8888);
+			pixmap.getPixels().asIntBuffer().put(pixels);
+
+
+			JumpingSumoVideoLookData.framePixmap = pixmap;
+
 			return ARCONTROLLER_ERROR_ENUM.ARCONTROLLER_OK;
 		}
 
