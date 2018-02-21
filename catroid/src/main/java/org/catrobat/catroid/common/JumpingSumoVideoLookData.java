@@ -22,55 +22,27 @@
  */
 package org.catrobat.catroid.common;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.opengl.GLES20;
-import android.opengl.GLUtils;
-import android.os.Handler;
+import android.graphics.Rect;
 import android.util.Log;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.parrot.arsdk.arcontroller.ARFrame;
 
-import android.widget.ImageView;
-
-import org.catrobat.catroid.ProjectManager;
 import org.catrobat.catroid.content.bricks.Brick;
-import org.catrobat.catroid.drone.jumpingsumo.JumpingSumoDataContainer;
 import org.catrobat.catroid.io.StorageHandler;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
-
-import static com.badlogic.gdx.Gdx.gl;
-
-import static org.catrobat.catroid.CatroidApplication.getAppContext;
 
 public class JumpingSumoVideoLookData extends LookData {
 
 	private static final String TAG = JumpingSumoVideoLookData.class.getSimpleName();
 
 	private transient boolean firstStart = true;
-	private transient int[] videoSize = {0, 0};
 	private transient int[] defaultVideoTextureSize;
-	private transient JumpingSumoDataContainer pixmapReceiver = JumpingSumoDataContainer.getInstance();
-	private transient final Handler handler = new Handler(getAppContext().getMainLooper());
-	private transient ARFrame frame;
-	private transient Bitmap bmp;
-	private transient ImageView view;
-	public static transient boolean changedAsdf = true;
-	public static transient Pixmap framePixmap = null;
-	public static transient Texture texture;
+	private transient Texture texture;
 	public static transient ConcurrentLinkedQueue<Pixmap> videoPixmaps = new ConcurrentLinkedQueue<>();
 
 	@Override
@@ -95,127 +67,51 @@ public class JumpingSumoVideoLookData extends LookData {
 
 	@Override
 	public Pixmap getPixmap() {
-
-		defaultVideoTextureSize = new int[] {50, 50};
-		/*if (pixmap != null && pixmap != framePixmap) {
-			pixmap.dispose();
-			pixmap = framePixmap;
-		}*/
 		if (pixmap == null) {
-			pixmap = new Pixmap(30, 30, Pixmap.Format.RGB888);
-			pixmap.setColor(Color.RED);
-			pixmap.fill();
+			pixmap = new Pixmap(0, 0, Pixmap.Format.RGB888);
 			pixmap.setBlending(Pixmap.Blending.None);
 		}
-		//pixmap = pixmapReceiver.getFramePixmap();
 		return pixmap;
+	}
+
+	public Rect getScaledDimensions(int width, int height) {
+		float ratio = (float) ScreenValues.SCREEN_WIDTH / width;
+		int scaledWidth = Math.round(width * ratio);
+		int scaledHeight = Math.round(height * ratio);
+		if (scaledHeight < ScreenValues.SCREEN_HEIGHT) {
+			ratio = (float) ScreenValues.SCREEN_HEIGHT / height;
+			scaledWidth = Math.round(width * ratio);
+			scaledHeight = Math.round(height * ratio);
+		}
+		return new Rect(0, 0, scaledWidth, scaledHeight);
 	}
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		if (!firstStart) {
-			texture.dispose();
-		}
-		firstStart = false;
-		/*asdf = new Pixmap(ScreenValues.SCREEN_WIDTH, ScreenValues.SCREEN_HEIGHT, Pixmap.Format.RGBA8888);
-		asdf.setColor(Color.BLUE);
-		asdf.fill();
-		texture = new Texture(asdf);
-		//texture.draw(asdf, 0, 0);
-		batch.draw(texture, -900, -500);*/
+
 		if (videoPixmaps.size() == 0) {
 			return;
 		}
 		while (videoPixmaps.size() > 1) {
 			videoPixmaps.poll().dispose();
 		}
+
 		Pixmap currentPixmap = videoPixmaps.peek();
-		texture = new Texture(currentPixmap);
-		Image image = new Image(texture);
-		image.draw(batch, parentAlpha);
-
-
-		/*
-		if (framePixmap != null && texture == null) {
-			JumpingSumoVideoLookData.texture = new Texture(framePixmap);
-		}
-		if (framePixmap != null && texture != null) {
-			Gdx.gl20.glBindTexture(GL20.GL_TEXTURE_2D, texture.getTextureObjectHandle());
-			texture.draw(framePixmap, 0, 0);
-			batch.draw(texture, 0, 0);
-
-		}*/
-
-
-		/*byte[] data = pixmapReceiver.getFrame().getByteData();
-		bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
-		view.setImageBitmap(bmp);*/
-		/*synchronized (this) {
-			pix = pixmapReceiver.getFramePixmap();
-			if (pix == null) {
-				Log.e(TAG, "pixmap:");
-				return;
-			}
-			tex = new Texture(new PixmapTextureData(pix, pix.getFormat(), false, false, true));
-			//tex = new Texture(pix);
-			textureRegion.setTexture(tex);
-		}*/
-		/*
-		bmp = pixmapReceiver.getBitmap();
-		Log.d(TAG, pixmapReceiver.getBitmap().toString());
-		synchronized (this) {
-			tex = new Texture(bmp.getWidth(), bmp.getHeight(), Pixmap.Format.RGB888);
-			Gdx.gl20.glBindTexture(GL20.GL_TEXTURE_2D, tex.getTextureObjectHandle());
-			Log.d(TAG, tex.toString());
-			GLUtils.texImage2D(GL20.GL_TEXTURE_2D, 0, bmp, 0);
-			Gdx.gl20.glBindTexture(GL20.GL_TEXTURE_2D, 0);
-			Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
-			bmp.recycle();
-
-			/*if(bmp!=null)
-			{
-				bmp.recycle();
-				bmp=null;
-			}*/
-		//Gdx.gl20.glFlush();
-	}
-
-	//Gdx.gl20.glBindTexture(GL20.GL_TEXTURE_2D, textureRegion.getTexture().getTextureObjectHandle());
-	//}
-	//Log.d(TAG, "pix" + data.hashCode());
-	//Gdx.gl20.glBindTexture(GL20.GL_TEXTURE_2D, textureRegion.getTexture().getTextureObjectHandle());
-		/*
-		batch.setColor(Color.RED);
-		Log.d(TAG, "pixmap:" + pixm.getHeight() + ":" + pixm.hashCode());
-		Texture tex = new Texture(new PixmapTextureData(pixm, pixm.getFormat(), false, false, true));
-		Gdx.gl20.glBindTexture(GL20.GL_TEXTURE_2D, tex.getTextureObjectHandle());
-		tex.draw(pixm, 30, 30);
-		pixm.dispose();
-		textureRegion = new TextureRegion(tex);
-		Gdx.gl20.glBindTexture(GL20.GL_TEXTURE_2D, textureRegion.getTexture().getTextureObjectHandle());*/
-	//Log.d(TAG, "pix" + pix.hashCode());
-
-	//setPixmap(pixmap);
-	//Texture tex = new Texture(pixmap);
-	//textureRegion = new TextureRegion(tex);
-
-		/*if (firstStart) {
-			videoTexture = new GLBGVideoSprite();
-			onSurfaceChanged();
+		if (firstStart) { // TODO: reset firstStart
+			texture = new Texture(currentPixmap);
 			firstStart = false;
+		} else {
+			texture.draw(currentPixmap, 0, 0);
 		}
-		if (videoSize[0] != videoTexture.imageWidth || videoSize[1] != videoTexture.imageHeight) {
-			onSurfaceChanged();
-		}
-		Gdx.gl20.glBindTexture(GL20.GL_TEXTURE_2D, textureRegion.getTexture().getTextureObjectHandle());
-		videoTexture.onUpdateVideoTexture();
+		Image image = new Image(texture);
+		image.setX(-(ScreenValues.SCREEN_WIDTH / 2));
+		image.setY(-(ScreenValues.SCREEN_HEIGHT / 2));
+
+		Rect scaledDimensions = getScaledDimensions(texture.getWidth(), texture.getHeight());
+		image.setHeight(scaledDimensions.height());
+		image.setWidth(scaledDimensions.width());
+		image.draw(batch, parentAlpha);
 	}
-	private void onSurfaceChanged() {
-		videoSize[0] = videoTexture.imageWidth;
-		videoSize[1] = videoTexture.imageHeight;
-		videoTexture.onSurfaceChanged(videoSize[0], videoSize[1]);
-		//setSize(1f, 1f * Gdx.graphics.getHeight() / Gdx.graphics.getWidth());
-*/
 
 	@Override
 	public int getRequiredResources() {

@@ -165,10 +165,6 @@ public class Look extends Image {
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		if (lookData instanceof JumpingSumoVideoLookData) {
-			lookData.draw(batch, alpha);
-			return;
-		}
 		checkImageChanged();
 		batch.setShader(shader);
 		if (alpha == 0.0f) {
@@ -211,7 +207,7 @@ public class Look extends Image {
 			if (lookData == null) {
 				setBounds(getX() + getWidth() / 2f, getY() + getHeight() / 2f, 0f, 0f);
 				setDrawable(null);
-				//imageChanged = false;
+				imageChanged = false;
 				return;
 			}
 
@@ -238,7 +234,7 @@ public class Look extends Image {
 			setDrawable(drawable);
 
 			flipLookDataIfNeeded(getRotationMode());
-			//imageChanged = false;
+			imageChanged = false;
 		}
 	}
 
