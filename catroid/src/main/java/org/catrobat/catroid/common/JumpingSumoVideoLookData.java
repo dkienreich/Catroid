@@ -74,18 +74,6 @@ public class JumpingSumoVideoLookData extends LookData {
 		return pixmap;
 	}
 
-	public Rect getScaledDimensions(int width, int height) {
-		float ratio = (float) ScreenValues.SCREEN_WIDTH / width;
-		int scaledWidth = Math.round(width * ratio);
-		int scaledHeight = Math.round(height * ratio);
-		if (scaledHeight < ScreenValues.SCREEN_HEIGHT) {
-			ratio = (float) ScreenValues.SCREEN_HEIGHT / height;
-			scaledWidth = Math.round(width * ratio);
-			scaledHeight = Math.round(height * ratio);
-		}
-		return new Rect(0, 0, scaledWidth, scaledHeight);
-	}
-
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 
@@ -103,6 +91,11 @@ public class JumpingSumoVideoLookData extends LookData {
 		} else {
 			texture.draw(currentPixmap, 0, 0);
 		}
+		Image image = createImageFromTexture();
+		image.draw(batch, parentAlpha);
+	}
+
+	private Image createImageFromTexture() {
 		Image image = new Image(texture);
 		image.setX(-(ScreenValues.SCREEN_WIDTH / 2));
 		image.setY(-(ScreenValues.SCREEN_HEIGHT / 2));
@@ -110,7 +103,19 @@ public class JumpingSumoVideoLookData extends LookData {
 		Rect scaledDimensions = getScaledDimensions(texture.getWidth(), texture.getHeight());
 		image.setHeight(scaledDimensions.height());
 		image.setWidth(scaledDimensions.width());
-		image.draw(batch, parentAlpha);
+		return image;
+	}
+
+	private Rect getScaledDimensions(int width, int height) {
+		float ratio = (float) ScreenValues.SCREEN_WIDTH / width;
+		int scaledWidth = Math.round(width * ratio);
+		int scaledHeight = Math.round(height * ratio);
+		if (scaledHeight < ScreenValues.SCREEN_HEIGHT) {
+			ratio = (float) ScreenValues.SCREEN_HEIGHT / height;
+			scaledWidth = Math.round(width * ratio);
+			scaledHeight = Math.round(height * ratio);
+		}
+		return new Rect(0, 0, scaledWidth, scaledHeight);
 	}
 
 	@Override
