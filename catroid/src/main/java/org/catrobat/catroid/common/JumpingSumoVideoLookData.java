@@ -25,10 +25,10 @@ package org.catrobat.catroid.common;
 import android.graphics.Rect;
 import android.util.Log;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import org.catrobat.catroid.content.bricks.Brick;
 import org.catrobat.catroid.io.StorageHandler;
@@ -43,6 +43,7 @@ public class JumpingSumoVideoLookData extends LookData {
 	private transient boolean firstStart = true;
 	private transient int[] defaultVideoTextureSize;
 	private transient Texture texture;
+	private transient Rect dimensions;
 	public static transient ConcurrentLinkedQueue<Pixmap> videoPixmaps = new ConcurrentLinkedQueue<>();
 
 	@Override
@@ -87,26 +88,29 @@ public class JumpingSumoVideoLookData extends LookData {
 		Pixmap currentPixmap = videoPixmaps.peek();
 		if (firstStart) { // TODO: reset firstStart
 			texture = new Texture(currentPixmap);
+			dimensions = getFullscreenDimensions(texture.getWidth(), texture.getHeight());
 			firstStart = false;
 		} else {
 			texture.draw(currentPixmap, 0, 0);
 		}
-		Image image = createImageFromTexture();
-		image.draw(batch, parentAlpha);
+
+		Color color = Color.WHITE;
+		batch.setColor(color.r, color.g, color.b, color.a * parentAlpha);
+		batch.draw(texture, dimensions.left, dimensions.top, dimensions.width(), dimensions.height());
 	}
 
-	private Image createImageFromTexture() {
+	/*private Image createImageFromTexture() {
 		Image image = new Image(texture);
-		image.setX(-(ScreenValues.SCREEN_WIDTH / 2));
-		image.setY(-(ScreenValues.SCREEN_HEIGHT / 2));
+		image.setX();
+		image.setY();
 
-		Rect scaledDimensions = getScaledDimensions(texture.getWidth(), texture.getHeight());
+		Rect scaledDimensions = getFullscreenDimensions(texture.getWidth(), texture.getHeight());
 		image.setHeight(scaledDimensions.height());
 		image.setWidth(scaledDimensions.width());
 		return image;
-	}
+	}*/
 
-	private Rect getScaledDimensions(int width, int height) {
+	private Rect getFullscreenDimensions(int width, int height) {
 		float ratio = (float) ScreenValues.SCREEN_WIDTH / width;
 		int scaledWidth = Math.round(width * ratio);
 		int scaledHeight = Math.round(height * ratio);
@@ -115,7 +119,7 @@ public class JumpingSumoVideoLookData extends LookData {
 			scaledWidth = Math.round(width * ratio);
 			scaledHeight = Math.round(height * ratio);
 		}
-		return new Rect(0, 0, scaledWidth, scaledHeight);
+		return new Rect(-(ScreenValues.SCREEN_WIDTH / 2), -(ScreenValues.SCREEN_HEIGHT / 2), scaledWidth - (ScreenValues.SCREEN_WIDTH / 2), scaledHeight - (ScreenValues.SCREEN_HEIGHT / 2));
 	}
 
 	@Override
