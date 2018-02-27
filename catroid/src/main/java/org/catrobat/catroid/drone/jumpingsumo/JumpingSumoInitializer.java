@@ -85,12 +85,9 @@ public class JumpingSumoInitializer {
 	private ARCONTROLLER_DEVICE_STATE_ENUM deviceState = ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_STOPPED;
 
 	private static final int JUMPING_SUMO_BATTERY_THRESHOLD = 3;
-	private static final int CONNECTION_TIME = 10000;
+	private static final int CONNECTION_TIME = 5000;
 	private static int jumpingSumoCount = 0;
 	private boolean messageShown = false;
-
-	public JumpingSumoInitializer() {
-	}
 
 	public static JumpingSumoInitializer getInstance() {
 		if (instance == null) {
@@ -158,7 +155,7 @@ public class JumpingSumoInitializer {
 
 		if (battery < JUMPING_SUMO_BATTERY_THRESHOLD && !messageShown) {
 			messageShown = true;
-			if (stageActivity instanceof StageActivity && !(stageActivity == null)) {
+			if (stageActivity instanceof StageActivity) {
 				showUnCancellableErrorDialog(stageActivity,
 						stageActivity.getString(R.string.error_jumpingsumo_battery_title),
 						stageActivity.getString(R.string.error_jumpingsumo_battery));

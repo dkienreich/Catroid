@@ -23,7 +23,6 @@
 package org.catrobat.catroid.common;
 
 import android.graphics.Rect;
-import android.util.Log;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -31,8 +30,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import org.catrobat.catroid.content.bricks.Brick;
-import org.catrobat.catroid.io.StorageHandler;
+import org.catrobat.catroid.io.StorageOperations;
+import org.catrobat.catroid.stage.StageActivity;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -40,25 +41,22 @@ public class JumpingSumoVideoLookData extends LookData {
 
 	private static final String TAG = JumpingSumoVideoLookData.class.getSimpleName();
 
-	private transient boolean firstStart = true;
 	private transient int[] defaultVideoTextureSize;
 	private transient Texture texture;
 	private transient Rect dimensions;
 	public static transient ConcurrentLinkedQueue<Pixmap> videoPixmaps = new ConcurrentLinkedQueue<>();
 
+	public JumpingSumoVideoLookData(String name, File file) {
+		super(name, file);
+	}
+
 	@Override
 	public JumpingSumoVideoLookData clone() {
-		String copiedFileName;
 		try {
-			copiedFileName = StorageHandler.copyFile(getAbsolutePath()).getName();
+			return new JumpingSumoVideoLookData(name, StorageOperations.duplicateFile(file));
 		} catch (IOException e) {
-			Log.e(TAG, "Could not copy file: " + fileName + ", fallback to shallow clone.");
-			copiedFileName = fileName;
+			throw new RuntimeException(TAG + ": Could not copy file: " + file.getAbsolutePath());
 		}
-		JumpingSumoVideoLookData clone = new JumpingSumoVideoLookData();
-		clone.setName(name);
-		clone.setFileName(copiedFileName);
-		return clone;
 	}
 
 	@Override
@@ -86,10 +84,12 @@ public class JumpingSumoVideoLookData extends LookData {
 		}
 
 		Pixmap currentPixmap = videoPixmaps.peek();
-		if (firstStart) { // TODO: reset firstStart
+		if (!StageActivity.stageListener.firstFrameDrawn) {
+			if (texture != null) {
+				texture.dispose();
+			}
 			texture = new Texture(currentPixmap);
 			dimensions = getFullscreenDimensions(texture.getWidth(), texture.getHeight());
-			firstStart = false;
 		} else {
 			texture.draw(currentPixmap, 0, 0);
 		}
@@ -99,27 +99,19 @@ public class JumpingSumoVideoLookData extends LookData {
 		batch.draw(texture, dimensions.left, dimensions.top, dimensions.width(), dimensions.height());
 	}
 
-	/*private Image createImageFromTexture() {
-		Image image = new Image(texture);
-		image.setX();
-		image.setY();
-
-		Rect scaledDimensions = getFullscreenDimensions(texture.getWidth(), texture.getHeight());
-		image.setHeight(scaledDimensions.height());
-		image.setWidth(scaledDimensions.width());
-		return image;
-	}*/
-
 	private Rect getFullscreenDimensions(int width, int height) {
 		float ratio = (float) ScreenValues.SCREEN_WIDTH / width;
 		int scaledWidth = Math.round(width * ratio);
 		int scaledHeight = Math.round(height * ratio);
+		int minXCoordinate = -(ScreenValues.SCREEN_WIDTH / 2);
+		int minYCoordinate = -(ScreenValues.SCREEN_HEIGHT / 2);
 		if (scaledHeight < ScreenValues.SCREEN_HEIGHT) {
 			ratio = (float) ScreenValues.SCREEN_HEIGHT / height;
 			scaledWidth = Math.round(width * ratio);
 			scaledHeight = Math.round(height * ratio);
 		}
-		return new Rect(-(ScreenValues.SCREEN_WIDTH / 2), -(ScreenValues.SCREEN_HEIGHT / 2), scaledWidth - (ScreenValues.SCREEN_WIDTH / 2), scaledHeight - (ScreenValues.SCREEN_HEIGHT / 2));
+		return new Rect(minXCoordinate, minYCoordinate, minXCoordinate + scaledWidth,
+				minYCoordinate + scaledHeight);
 	}
 
 	@Override

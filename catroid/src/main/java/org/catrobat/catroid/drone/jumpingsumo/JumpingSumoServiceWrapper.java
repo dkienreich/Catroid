@@ -32,6 +32,7 @@ import org.catrobat.catroid.stage.PreStageActivity;
 import org.catrobat.catroid.ui.dialogs.TermsOfUseJSDialogFragment;
 import org.catrobat.catroid.ui.settingsfragments.SettingsFragment;
 
+
 public final class JumpingSumoServiceWrapper {
 
 	private static JumpingSumoServiceWrapper instance = null;
@@ -71,12 +72,13 @@ public final class JumpingSumoServiceWrapper {
 	}
 
 	public static void initJumpingSumo(PreStageActivity prestageStageActivity) {
+		if (!SettingsFragment.areTermsOfServiceJSAgreedPermanently(prestageStageActivity.getApplicationContext())) {
+			showTermsOfUseDialog(prestageStageActivity);
+		}
 		if (SettingsFragment.areTermsOfServiceJSAgreedPermanently(prestageStageActivity.getApplicationContext())) {
 			jumpingSumoInitializer = getJumpingSumoInitialiser(prestageStageActivity);
 			jumpingSumoInitializer.initialise();
 			jumpingSumoInitializer.checkJumpingSumoAvailability(prestageStageActivity);
-		} else {
-			showTermsOfUseDialog(prestageStageActivity);
 		}
 	}
 

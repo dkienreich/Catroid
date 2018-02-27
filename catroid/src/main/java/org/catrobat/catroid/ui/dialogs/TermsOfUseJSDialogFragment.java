@@ -83,11 +83,6 @@ public class TermsOfUseJSDialogFragment extends DialogFragment {
 							&& checkboxTermsOfUseAcceptedPermanently.isChecked()) {
 						SettingsFragment.setTermsOfServiceJSAgreedPermanently(getActivity(), true);
 					}
-					JumpingSumoInitializer jsDiscoverer = ((PreStageActivity) getActivity()).getJumpingSumoInitialiser();
-					if (jsDiscoverer != null && jsDiscoverer.checkRequirements()) {
-						jsDiscoverer.initialise();
-						jsDiscoverer.checkJumpingSumoAvailability(prestageStageActivity);
-					}
 				}
 				dialog.dismiss();
 			}
